@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<!-- config -->
+<th:block th:replace="fragment/config :: configFragment"></th:block>
+
+<body>
+<!-- header -->
+<th:block th:replace="fragment/header :: headerFragment"></th:block>
+<div class="container my-5">
+    <div class="p-5 text-center bg-body-tertiary rounded-3">
+        <div class="embed-responsive embed-responsive-4by3">
+            <div class="embed-responsive embed-responsive-4by3">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/BmJv18bISJo?autoplay=1&mute=1"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+            </div>
+        </div>
+        <h1 class="text-body-emphasis">WORK OUT OF DAY</h1>
+        <p class="col-lg-8 mx-auto fs-5 text-muted">
+            CROSSFIT
+        </p>
+        <div class="d-inline-flex gap-2 mb-5">
+            <button class="d-inline-flex align-items-center btn btn-primary btn-lg rounded-pill" type="button"
+                    onclick="location.href='/workout'">
+                Check WorkOut
+            </button>
+        </div>
+    </div>
+    <th:block th:replace="fragment/footer :: footerFragment"></th:block>
+
+</div>
+</body>
+</html>
