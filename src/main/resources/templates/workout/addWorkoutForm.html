@@ -1,0 +1,69 @@
+<!-- config -->
+<th:block th:replace="fragment/config :: configFragment"></th:block>
+<body>
+<!-- header -->
+<th:block th:replace="fragment/header :: headerFragment"></th:block>
+<div class="container">
+  <div class="p-5 text-center bg-body-tertiary rounded-3">
+    <h1 class="text-body-emphasis">MAKE, SHARE YOUR WORKOUT</h1>
+    <p class="col-lg-8 mx-auto fs-5 text-muted mb-2">
+      CROSSFIT
+    </p>
+    <div class="card-body p-5 justify-content-center d-flex">
+      <form class="w-50" th:object="${workout}" onsubmit="return false">
+        <article>
+          <input type="hidden" id="id" th:value="${#authentication.principal.id}"/>
+          <div class="row g-3 align-items-center mb-3">
+            <div class="col-2">
+              <label th:for="*{title}" class="form-label">제목</label>
+            </div>
+            <div class="col-10">
+              <input type="text" class="form-control" th:field="*{title}">
+            </div>
+          </div>
+          <div class="row g-3 align-items-center mb-3">
+            <div class="col-2">
+              <label th:for="*{content}" class="form-label">본문</label>
+            </div>
+            <div class="col-10">
+              <textarea class="form-control" rows="7" th:field="*{content}"></textarea>
+            </div>
+          </div>
+          <div class="row g-3 align-items-center mb-3">
+            <div class="col-2">
+              <label for="tags" class="form-label">해시태그</label>
+            </div>
+            <div class="col-10">
+              <input id="tags" type="text" name="tags"
+                     class="tagify-outside form-control" aria-describedby="tagHelp"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="col-5">
+              <button type="button" class="btn btn-secondary w-50"
+                      th:onclick="|location.href='@{/workout}'|">취소
+              </button>
+            </div>
+            <div class="col-5">
+              <button type="button" class="btn btn-primary w-50" id="save-workout">등록</button>
+            </div>
+          </div>
+          <ul id="tag-list"></ul>
+        </article>
+      </form>
+    </div>
+  </div>
+</div>
+<th:block th:replace="fragment/footer :: footerFragment"></th:block>
+</body>
+<script>
+  let input = document.querySelector('input[name="tags"]');
+  let tagify = new Tagify(input);
+
+  // 태그가 추가되면 이벤트 발생
+  tagify.on('add', function() {
+    console.log(tagify.value); // 입력된 태그 정보 객체
+  })
+</script>

@@ -1,0 +1,240 @@
+<!-- config -->
+<th:block th:replace="fragment/config :: configFragment"></th:block>
+<body>
+<!-- header -->
+<th:block th:replace="fragment/header :: headerFragment"></th:block>
+<div class="container-md">
+  <div class="p-4 bg-body-tertiary rounded-3">
+    <div class="row">
+      <div class="col">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <div class="nav nav-divider">
+              <div class="row">
+                <div class="col-auto">
+                  <small class="nav-item card-title mb-0" th:text="|조회 ${workout.views} |"></small>
+                </div>
+                <div>
+                  <small class="text-body-secondary"
+                         th:text="${#temporals.format(workout.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-auto">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <div class="avatar avatar-story me-2">
+              <th:block th:if="${heartCheck} == false">
+                <button id="increaseHeart" type="button" class="btn btn-secondary me-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                       fill="currentColor"
+                       class="bi bi-heart" viewBox="0 0 16 16">
+                    <path
+                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"></path>
+                  </svg>
+                  [[${workout.heartCount}]]
+                </button>
+              </th:block>
+              <th:block th:unless="${heartCheck} == false">
+                <button id="decreaseHeart" type="button" class="btn btn-secondary me-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                       fill="currentColor"
+                       class="bi bi-heart-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                  </svg>
+                  [[${workout.heartCount}]]
+                </button>
+              </th:block>
+              <input type="hidden" id="workout-id" th:value="${workout.id}"/>
+              <input type="hidden" id="member-id" th:value="${#authentication.principal.id}"/>
+            </div>
+            <a href="#" class="text-decoration-none" style="color: #adb5bd" data-bs-toggle="modal"
+               data-bs-target="#profileModal">
+              <th:block th:if="${profile.storeFileName != null}">
+                <img id="previewProfile" class="me-2"
+                     th:src="'/api/profile/images/' + ${profile.storeFileName} + ''"
+                     width="35" height="35" alt=""/>
+              </th:block>
+              <th:block th:unless="${profile.storeFileName != null}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                     class="bi bi-person-bounding-box me-2" viewBox="0 0 16 16">
+                  <path
+                      d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z"/>
+                  <path
+                      d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                </svg>
+              </th:block>
+            </a>
+            <div>
+              <div class="nav nav-divider">
+                <h6 class="nav-item card-title mb-0 fw-bold">
+                  <a href="#" class="text-decoration-none" style="color: #adb5bd"
+                     data-bs-toggle="modal" data-bs-target="#profileModal"
+                     th:text="${workout.member.name}"></a>
+                </h6>
+              </div>
+              <p class="mb-0 small" th:text="${workout.member.box}"></p>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="profileModal" tabindex="-1"
+                 aria-labelledby="profileModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-body text-center">
+                    <img id="preview"
+                         th:src="${profile.storeFileName == null} ? '/static/img/profile.svg' : '/api/profile/images/' + ${profile.storeFileName} + ''"
+                         width="130" height="130" alt=""/>
+                    <h3 class="fw-bold mt-3" th:text="${workout.member.name}"></h3>
+                    <a th:href="${profile.getInstagram()}" class="text-decoration-none">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                           fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+                        <path
+                            d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
+                      </svg>
+                    </a>
+                    <hr>
+                    <th:block th:if="${profile.profileBenchmarks.size() != 0}">
+                      <div class="card mb-2"
+                           th:each="profileBenchmark : ${profile.profileBenchmarks}">
+                        <div class="card-body">
+                          <p class="card-title fw-bold"
+                             th:text="${profileBenchmark.benchmark.title}"></p>
+                          <p class="card-text fw-bold"
+                             th:id="|benchmark_${profileBenchmark.benchmark.id}|"
+                             th:text="${profileBenchmark.record == null} ? '-' : ${profileBenchmark.record + profileBenchmark.benchmark.content} ">
+                          </p>
+                        </div>
+                      </div>
+                    </th:block>
+                    <th:block th:unless="${profile.profileBenchmarks.size() != 0}">
+                      <p>등록된 벤치마크가 없습니다 ㅠ-ㅠ</p>
+                    </th:block>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-4 text-center bg-body-tertiary rounded-3">
+      <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold" th:text="${workout.title}"></h1>
+        <p class="col fs-4"
+           th:utext="${#strings.replace(workout.content, '&#10;', '&lt;br&gt;')}"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-start mb-2">
+        <th:block th:if="${workout.hashtags.size() != 0}">
+          <a th:each="hashtag : ${workout.hashtags}"
+             class="link-secondary fw-bold text-decoration-none"
+             th:href="@{/workout(hashtag=${hashtag.content})}"
+             th:text="|#${hashtag.content} |"></a>
+        </th:block>
+      </div>
+    </div>
+    <form class="row" onsubmit="return false">
+      <label for="comment" class="form-label text-lg-start fw-bold"
+             th:text="|댓글 ${workout.comments.size()}|"></label>
+      <div class="col">
+        <textarea class="form-control" id="comment" rows="1"></textarea>
+      </div>
+      <div class="col-auto">
+        <button type="button" class="btn btn-primary mb-3" id="save-comment">댓글 등록</button>
+      </div>
+    </form>
+    <th:block th:if="${workout.comments.size() != 0}">
+      <div style="height: 450px; overflow: auto">
+        <div class="card mb-3" th:each="comment : ${workout.comments}">
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <div class="d-flex align-items-center">
+                    <div class="avatar avatar-story me-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                           fill="currentColor"
+                           class="bi bi-person-bounding-box" viewBox="0 0 16 16">
+                        <path
+                            d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z"/>
+                        <path
+                            d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="nav nav-divider">
+                        <h6 class="nav-item card-title mb-0 fw-bold"
+                            th:text="|${comment.member.name} - ${#temporals.format(comment.createdAt, 'yyyy.MM.dd HH:mm:ss')}|"></h6>
+                      </div>
+                      <p class="mb-0 small" th:text="${comment.member.box}"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div th:if="${#authentication.principal.id == comment.member.id}" class="col-auto">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
+                        th:data-bs-target="|#updateComment-${comment.id}|">수정
+                </button>
+                <div class="modal fade" th:id="|updateComment-${comment.id}|" tabindex="-1"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">댓글 수정</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form>
+                          <div class="mb-3">
+                            <label for="updateCommentContent" class="col-form-label">댓글</label>
+                            <textarea class="form-control" id="updateCommentContent"
+                                      th:text="${comment.content}"
+                                      th:value="${comment.content}"></textarea>
+                            <input type="hidden" id="comment-id" th:value="${comment.id}"/>
+                          </div>
+                        </form>
+                        <div class="text-end">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            취소
+                          </button>
+                          <button type="button" class="btn btn-primary" id="update-comment">수정
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-danger btn-sm"
+                        th:onclick="|deleteComment(${comment.id})|">삭제
+                </button>
+              </div>
+            </div>
+            <p class="card-text" th:text="${comment.content}"></p>
+          </div>
+        </div>
+      </div>
+    </th:block>
+    <th:block th:unless="${workout.comments.size() != 0}">
+      <div class="mb-4 text-center bg-body-tertiary rounded-3">
+        <div class="container-fluid py-5">
+          <div class="fs-4 mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                 class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
+              <path
+                  d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"></path>
+            </svg>
+            첫번째 댓글을 남겨주세요.
+          </div>
+        </div>
+      </div>
+    </th:block>
+  </div>
+</div>
+<th:block th:replace="fragment/footer :: footerFragment"></th:block>
+</body>
