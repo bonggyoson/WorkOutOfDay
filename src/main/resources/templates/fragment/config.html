@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<th:block th:fragment="configFragment">
+  <html lang="en"
+        xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/static/css/bootstrap.min.css}"
+          rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/static/css/main.css}">
+
+    <script th:src="@{/static/js/bootstrap.js}"></script>
+    <script th:src="@{/static/js/workout.js}" defer></script>
+    <script th:src="@{/static/js/heart.js}" defer></script>
+    <script th:src="@{/static/js/comment.js}" defer></script>
+    <script th:src="@{/static/js/profile.js}" defer></script>
+    <script th:src="@{/static/js/member.js}" defer></script>
+    <script th:src="@{/static/js/searchBox.js}" defer></script>
+
+    <!-- 소스 다운 -->
+    <script src="https://unpkg.com/@yaireo/tagify"></script>
+    <!-- 폴리필 (구버젼 브라우저 지원) -->
+    <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <title>WORKOUT OF DAY</title>
+  </head>
+  </html>
+</th:block>

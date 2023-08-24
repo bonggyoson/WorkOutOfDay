@@ -1,0 +1,43 @@
+<th:block th:fragment="myPageSideFragment">
+  <div class="col-md-5 col-lg-2 order-md-first">
+    <p class="px-2 me-2 fs-4 fw-bold">
+      마이페이지
+    </p>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a th:href="@{/myPage/myProfile(id=${#authentication.principal.id})}"
+           class="nav-link text-white"
+           th:classappend="${#httpServletRequest.requestURI == '/myPage/myProfile'} ? 'active'"
+        >
+          내 프로필
+        </a>
+      </li>
+      <li class="nav-item">
+        <a th:href="@{/myPage}"
+           class="nav-link text-white"
+           th:classappend="${#httpServletRequest.requestURI == '/myPage'} ? 'active'"
+        >
+          회원정보수정
+        </a>
+      </li>
+      <li class="nav-item">
+        <a th:href="@{/myPage/myWorkout(id=${#authentication.principal.id})}"
+           class="nav-link text-white"
+           th:classappend="${#httpServletRequest.requestURI == '/myPage/myWorkout'} ? 'active'"
+        >
+          내 게시글
+        </a>
+      </li>
+      <li class="nav-item">
+        <a th:href="@{/myPage/myComment(id=${#authentication.principal.id})}"
+           class="nav-link text-white"
+           th:classappend="${#httpServletRequest.requestURI == '/myPage/myComment'} ? 'active'"
+        >
+          내 댓글
+        </a>
+      </li>
+    </ul>
+    <hr>
+  </div>
+</th:block>
