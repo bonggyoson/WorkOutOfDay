@@ -1,0 +1,22 @@
+.gradient-custom {
+  background: linear-gradient(to right, rgba(254, 238, 229, 1), rgba(229, 193, 197, 1))
+}
+
+.field-error {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.scrollbar {
+  white-space: nowrap;
+  overflow-y: auto;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: gray; /* 스크롤바 색상 */
+  border-radius: 5px; /* 스크롤바 둥근 테두리 */
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: rgba(220, 20, 60, .1);  /*스크롤바 뒷 배경 색상*/
+}
