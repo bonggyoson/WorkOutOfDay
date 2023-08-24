@@ -1,0 +1,28 @@
+<!-- config -->
+<th:block th:replace="fragment/config :: configFragment"></th:block>
+<body>
+<!-- header -->
+<th:block th:replace="fragment/header :: headerFragment"></th:block>
+<div class="container">
+  <div class="p-5 text-center bg-body-tertiary rounded-3">
+    <h1 class="text-body-emphasis">WORK OUT OF DAY</h1>
+    <p class="col-lg-8 mx-auto fs-5 text-muted">
+      CROSSFIT
+    </p>
+    <div>
+      <div>
+        <p>
+          원하시는 페이지를 찾을 수 없습니다.
+        </p>
+      </div>
+      <div>
+        <button class="btn btn-primary" type="button"
+                onclick="location.href='/workout'">
+          홈으로 돌아가기
+        </button>
+      </div>
+    </div>
+  </div>
+  <th:block th:replace="fragment/footer :: footerFragment"></th:block>
+</div>
+</body>
