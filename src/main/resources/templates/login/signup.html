@@ -1,0 +1,100 @@
+<!-- config -->
+<th:block th:replace="fragment/config :: configFragment"></th:block>
+<head>
+  <meta charset="UTF-8">
+  <title>WORKOUT OF DAYS</title>
+  <link rel="stylesheet" th:href="@{../../static/css/searchBox.css}">
+</head>
+<body class="gradient-custom">
+<div class="container w-25">
+  <section class="d-flex vh-100">
+    <div class="container-fluid row justify-content-center align-content-center">
+      <div class="card bg-dark" style="border-radius: 1rem;">
+        <div class="card-body p-5 text-center">
+          <button type="button" class="btn btn-lg mb-2 fw-bold text-white"
+                  onclick="location.href='/'">WORK OUT OF DAY
+          </button>
+          <p class="text-white-100 fw-bold">회원가입</p>
+          <div class="mb-2">
+            <form onsubmit="return false">
+              <!-- 토큰을 추가 하여 CSRF 공격 방지 -->
+              <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}"/>
+              <div class="mb-3">
+                <input type="text" class="form-control" name="email" id="email"
+                       placeholder="이메일">
+              </div>
+              <div class="mb-3">
+                <input type="password" class="form-control" name="password" id="password"
+                       placeholder="비밀번호">
+              </div>
+              <div class="mb-3">
+                <input type="text" class="form-control" name="name" id="name"
+                       placeholder="이름">
+              </div>
+              <div class="mb-3 g-4 row">
+                <div class="col">
+                  <input type="text" class="form-control" name="box" id="box"
+                         placeholder="박스" disabled>
+                </div>
+                <div class="col-auto">
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                          data-bs-target="#searchModalBox">검색
+                  </button>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary me-2" id="save-member">회원가입</button>
+              <button type="button" class="btn btn-secondary" onclick="location.href='/login'">
+                로그인
+              </button>
+            </form>
+
+            <!-- Modal -->
+            <div class="modal fade" id="searchModalBox" tabindex="-1"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <div class="row border-bottom border-3 border-secondary pb-2">
+                      <div class="col text-start">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">박스 찾기</h1>
+                      </div>
+                      <div class="col text-end">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                      </div>
+                    </div>
+                    <br/>
+                    <div class="map_wrap pt-1">
+                      <div id="map"></div>
+                      <div id="menu_wrap" class="bg_white">
+                        <div class="option">
+                          <div>
+                            <form onsubmit="return false;">
+                              <input
+                                  type="text"
+                                  value="크로스핏"
+                                  id="keyword"
+                                  size="15">
+                              <button type="button" onclick="searchPlaces()">검색
+                              </button>
+                            </form>
+                          </div>
+                        </div>
+                        <hr>
+                        <ul id="placesList"></ul>
+                        <div id="pagination"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+<script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3962f0e8680b95bb6238a9a9a5e6cb1d&libraries=services"></script>
