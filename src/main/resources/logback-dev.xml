@@ -7,7 +7,7 @@
     <!-- log file path -->
     <property name="LOG_PATH" value="/Users/bonggyoson/Develop/logs/dev"/>
     <!-- log file name -->
-    <property name="LOG_FILE_NAME" value="dev_log"/>
+    <property name="LOG_FILE_NAME" value="dev"/>
     <property name="LOG_PATTERN"
       value="%d{yyyy-MM-dd HH:mm:ss} %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
 
