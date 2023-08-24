@@ -1,0 +1,50 @@
+<!-- config -->
+<th:block th:replace="fragment/config :: configFragment"
+          xmlns:th="http://www.w3.org/1999/html"></th:block>
+<body>
+<!-- header -->
+<th:block th:replace="fragment/header :: headerFragment"></th:block>
+<div class="container">
+  <div class="p-5 text-center bg-body-tertiary rounded-3">
+    <h1 class="text-body-emphasis text-center">Search Crossfit</h1>
+    <p class="col-lg-8 mx-auto fs-5 text-muted text-center">
+      CROSSFIT
+    </p>
+    <form th:action="@{'/notice'}" class="row g-2 container-fluid justify-content-md-center"
+          method="get">
+      <div class="col-auto">
+        <input class="form-control" type="text" name="search" aria-label="Search" placeholder="검색"
+               th:value="${search}">
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="22" fill="currentColor"
+               class="bi bi-search" viewBox="0 0 16 16">
+            <path
+                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          </svg>
+        </button>
+      </div>
+    </form>
+    <div class="card mb-3" th:each="news : ${news}">
+      <div class="row g-0">
+        <th:block th:if="${news.image != ''}">
+          <div class="col-md-4">
+            <a th:href="${news.url}" target="_blank">
+              <img th:src="${news.image}" class="img-fluid rounded-start">
+            </a>
+          </div>
+        </th:block>
+        <div class="col">
+          <div class="card-body text-start mt-2">
+            <a th:href="${news.url}" target="_blank">
+              <span th:text="${news.subject}"></span></a>
+            <p class="card-text mt-3" th:text="${news.content}"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<th:block th:replace="fragment/footer :: footerFragment"></th:block>
+</body>
