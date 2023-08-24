@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<!-- config -->
+<th:block th:replace="fragment/config :: configFragment"></th:block>
+<link rel="stylesheet" th:href="@{/static/css/searchBox.css}">
+<body>
+<!-- header -->
+<th:block th:replace="fragment/header :: headerFragment"></th:block>
+<div class="container">
+  <div class="p-3 text-center bg-body-tertiary rounded-3">
+    <div class="row">
+      <th:block th:replace="fragment/myPageSide :: myPageSideFragment"></th:block>
+      <div class="col-md-7 col-lg-10">
+        <h4 class="mb-3">회원정보수정</h4>
+        <hr>
+        <input type="hidden" id="id" th:value="${#authentication.principal.id}"/>
+        <div class="mb-3 row">
+          <label for="email" class="col-sm-2 col-form-label">이메일</label>
+          <div class="col-sm-10">
+            <input type="email" name="username" class="form-control" id="email"
+                   th:value="${#authentication.principal.email}" disabled>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="password" class="col-sm-2 col-form-label">비밀번호</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control" id="password"
+                   th:value="${#authentication.principal.password}">
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="name" class="col-sm-2 col-form-label">이름</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="name"
+                   th:value="${#authentication.principal.name}">
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="box" class="col-sm-2 col-form-label">박스</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" id="box"
+                   th:value="${#authentication.principal.box}" disabled>
+          </div>
+          <div class="col-auto">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                    data-bs-target="#searchModalBox">검색
+            </button>
+          </div>
+        </div>
+        <hr class="my-4">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+          <button class="btn btn-primary btn-lg" type="button" id="update-member">정보 수정</button>
+          <button class="btn btn-danger btn-lg" type="button" id="delete-member">회원 탈퇴</button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="searchModalBox" tabindex="-1"
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">박스 찾기</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="map_wrap">
+                  <div id="map"></div>
+                  <div id="menu_wrap" class="bg_white">
+                    <div class="option">
+                      <div>
+                        <form onsubmit="return false;">
+                          <input
+                              type="text"
+                              value="크로스핏"
+                              id="keyword"
+                              size="15">
+                          <button type="button" onclick="searchPlaces()">검색
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                    <hr>
+                    <ul id="placesList"></ul>
+                    <div id="pagination"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<th:block th:replace="fragment/footer :: footerFragment"></th:block>
+</body>
+<script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3962f0e8680b95bb6238a9a9a5e6cb1d&libraries=services"></script>
+</html>

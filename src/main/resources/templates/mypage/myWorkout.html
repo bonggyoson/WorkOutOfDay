@@ -1,0 +1,122 @@
+<!-- config -->
+<th:block th:replace="fragment/config :: configFragment"></th:block>
+<body>
+<!-- header -->
+<th:block th:replace="fragment/header :: headerFragment"></th:block>
+<div class="container">
+  <div class="p-3 text-center bg-body-tertiary rounded-3">
+    <div class="row">
+      <th:block th:replace="fragment/myPageSide :: myPageSideFragment"></th:block>
+      <div class="col-md-7 col-lg-10">
+        <h4 class="mb-3">내 게시글</h4>
+        <hr>
+        <th:block th:if="${workouts.totalElements != 0}">
+          <div class="row row-cols-1 row-cols-md-1 g-4">
+            <div class="col" th:each="workout : ${workouts}">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-auto"><small class="text-body-secondary text-start"
+                                            th:text="${workout.id}"></small>
+                    </div>
+                    <div class="col">
+                      <a th:href="@{/workout/{id}(id=${workout.id})}"
+                         class="link fw-bold"
+                         th:text="${workout.title}"></a>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <div class="row">
+                    <div class="col text-start">
+                      <small
+                          class="text-body-secondary text-start"
+                          th:text="|조회 ${workout.views}|"></small>
+                    </div>
+                    <div class="col text-end">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                           fill="currentColor"
+                           class="bi bi-heart-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                      </svg>
+                      <small
+                          class="text-body-secondary"
+                          th:text="${workout.heartCount}"></small>
+                      &nbsp;
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                           fill="currentColor"
+                           class="bi bi-chat" viewBox="0 0 16 16">
+                        <path
+                            d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
+                      </svg>
+                      <small
+                          class="text-body-secondary"
+                          th:text="${workout.comments.size()}"></small>
+                      &nbsp;
+                      <a th:href="@{/myPage/updateWorkout/{id}(id=${workout.id})}"
+                         class="text-decoration-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                             fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                          <path
+                              d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center p-5"
+                th:with="start=${T(java.lang.Math).floor(workouts.number/10)*10 + 1}, last=(${start + 9 < workouts.totalPages ? start + 9 : workouts.totalPages})">
+
+              <li class="page-item">
+                <a class="page-link"
+                   th:href="@{/myPage/myWorkout(id=${#authentication.principal.id}, page=1)}"
+                   aria-label="First">맨 앞</a>
+              </li>
+              <li class="page-item" th:class="${workouts.first} ? 'disabled'">
+                <a class="page-link"
+                   th:href="${workouts.first} ? '#' : @{/myPage/myWorkout(id=${#authentication.principal.id}, page=${workouts.number})}">&lt;</a>
+              </li>
+              <li class="page-item" th:each="page : ${#numbers.sequence(start, last)}"
+                  th:class="${page == workouts.number + 1} ? 'active'">
+                <a class="page-link"
+                   th:href="@{/myPage/myWorkout(id=${#authentication.principal.id}, page=${page})}"
+                   th:text="${page}"></a>
+              </li>
+              <li class="page-item" th:class="${workouts.last} ? 'disabled'">
+                <a class="page-link"
+                   th:href="${workouts.last} ? '#' : @{/myPage/myWorkout(id=${#authentication.principal.id}, page=${workouts.number + 2})}">&gt;</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link"
+                   th:href="@{/myPage/myWorkout(id=${#authentication.principal.id}, page=${workouts.totalPages})}">맨
+                  뒤</a>
+              </li>
+            </ul>
+          </nav>
+        </th:block>
+        <th:block th:unless="${workouts.totalElements != 0}">
+          <div class="fs-3 mt-5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                 class="bi bi-box2" viewBox="0 0 16 16">
+              <path
+                  d="M2.95.4a1 1 0 0 1 .8-.4h8.5a1 1 0 0 1 .8.4l2.85 3.8a.5.5 0 0 1 .1.3V15a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4.5a.5.5 0 0 1 .1-.3L2.95.4ZM7.5 1H3.75L1.5 4h6V1Zm1 0v3h6l-2.25-3H8.5ZM15 5H1v10h14V5Z"></path>
+            </svg>
+            &nbsp; 작성한 오늘의 운동이 없습니다. &nbsp;
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                 class="bi bi-box2" viewBox="0 0 16 16">
+              <path
+                  d="M2.95.4a1 1 0 0 1 .8-.4h8.5a1 1 0 0 1 .8.4l2.85 3.8a.5.5 0 0 1 .1.3V15a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4.5a.5.5 0 0 1 .1-.3L2.95.4ZM7.5 1H3.75L1.5 4h6V1Zm1 0v3h6l-2.25-3H8.5ZM15 5H1v10h14V5Z"></path>
+            </svg>
+          </div>
+        </th:block>
+      </div>
+    </div>
+  </div>
+</div>
+<th:block th:replace="fragment/footer :: footerFragment"></th:block>
+</body>
