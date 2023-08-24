@@ -4,11 +4,21 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
+bootJar {
+    archiveBaseName = 'crossfit'
+    archiveFileName = 'crossfit.jar'
+    archiveVersion = "0.0.1"
+}
+
 group = 'wods'
 version = '0.0.1-SNAPSHOT'
 
 java {
     sourceCompatibility = '11'
+}
+
+jar {
+    enabled = false
 }
 
 configurations {
@@ -32,7 +42,9 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+    implementation 'net.datafaker:datafaker:2.0.1'
+    implementation 'org.jsoup:jsoup:1.15.3'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
     compileOnly 'org.projectlombok:lombok'
