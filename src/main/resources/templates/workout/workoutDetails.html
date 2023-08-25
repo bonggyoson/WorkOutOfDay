@@ -89,7 +89,8 @@
                          th:src="${profile.storeFileName == null} ? '/static/img/profile.svg' : '/api/profile/images/' + ${profile.storeFileName} + ''"
                          width="130" height="130" alt=""/>
                     <h3 class="fw-bold mt-3" th:text="${workout.member.name}"></h3>
-                    <a th:href="${profile.getInstagram()}" class="text-decoration-none">
+                    <a th:href="${profile.getInstagram()}" class="text-decoration-none"
+                       target="_blank">
                       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                            fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
                         <path
