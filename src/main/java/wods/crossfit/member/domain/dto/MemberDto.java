@@ -58,12 +58,14 @@ public class MemberDto {
 
         private Long id;
         private String email;
+        private String password;
         private String name;
         private String box;
 
         public MemberResponse(Member member) {
             this.id = member.getId();
             this.email = member.getEmail();
+            this.password = member.getPassword();
             this.name = member.getName();
             this.box = member.getBox();
         }

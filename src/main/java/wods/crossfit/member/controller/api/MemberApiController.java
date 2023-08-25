@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 import wods.crossfit.global.common.CommonResponse;
 import wods.crossfit.global.common.ErrorResponse;
 import wods.crossfit.global.common.ResponseMessage;
-import wods.crossfit.member.domain.dto.MemberDto;
 import wods.crossfit.member.domain.dto.MemberDto.MemberRequest;
 import wods.crossfit.member.domain.dto.MemberDto.MemberResponse;
 import wods.crossfit.member.service.MemberService;

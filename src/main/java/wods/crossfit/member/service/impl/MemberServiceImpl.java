@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 import wods.crossfit.member.domain.Member;
 import wods.crossfit.member.domain.dto.MemberDto.MemberRequest;
+import wods.crossfit.member.domain.dto.MemberDto.MemberResponse;
 import wods.crossfit.profile.domain.dto.ProfileDto;
 import wods.crossfit.profile.repository.ProfileRepository;
 import wods.crossfit.member.repository.MemberRepository;
