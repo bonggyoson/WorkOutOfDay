@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import wods.crossfit.member.service.MemberDetailService;
 
 @RequiredArgsConstructor
@@ -18,6 +19,10 @@ public class WebSecurityConfig {
     private final MemberDetailService memberService;
 
     private final LoginFailHandler loginFailHandler;
+
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     // 스프링 시큐리티 기능 비활성화
     @Bean
@@ -31,10 +36,12 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
-                .antMatchers("/login", "/api/member", "/", "/workout", "/signup", "/find", "/api/workout",
-                        "/resetPassword",
-                        "/member/**", "/box").permitAll()
+                .antMatchers("/login", "/api/member", "/", "/workout", "/signup", "/qa",
+                        "/resetPassword", "/member/**", "/box").permitAll()
                 .anyRequest().authenticated()
+                .and().exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -52,6 +59,15 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        CustomAccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
+        accessDeniedHandler.setErrorURL("/auth/denied");
+
+        return accessDeniedHandler;
+    }
+
 
     // 인증 관리자 관련 설정
     @Bean
