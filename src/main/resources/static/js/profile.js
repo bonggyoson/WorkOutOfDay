@@ -12,7 +12,7 @@ if (createBenchmark) {
       benchmark_arr.push(chked);
     });
 
-    fetch("/api/profile/benchmark", {
+    fetch("/api/benchmark", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -48,7 +48,7 @@ function deleteBenchmark(id) {
   })
   .then((result) => {
     if (result) {
-      fetch(`/api/profile/benchmark/${id}`, {
+      fetch(`/api/benchmark/${id}`, {
         method: 'DELETE'
       })
       .then(() => {
@@ -63,7 +63,7 @@ function deleteBenchmark(id) {
   });
 }
 
-// 벤치마크 기록 등록
+// 벤치마크 기록 등록 및 수정
 function updateBenchmark(id) {
   let memberId = document.getElementById('memberId').value;
   let record = document.getElementById('benchmarkRecord-' + id).value;
@@ -71,7 +71,7 @@ function updateBenchmark(id) {
   let regExp = /^[0-9]*$/;
 
   if (regExp.test(record) && record !== '') {
-    fetch(`/api/profile/benchmark/${id}`, {
+    fetch(`/api/benchmark/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
