@@ -16,27 +16,25 @@ import wods.crossfit.global.common.ErrorResponse;
 public class GlobalApiExceptionHandler {
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ErrorResponse<?>> handleException(NoHandlerFoundException e) {
+    public ResponseEntity<ErrorResponse<?>> handleApiException(NoHandlerFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.res(HttpStatus.NOT_FOUND, e.getMessage()));
     }
 
     @ExceptionHandler(DataAccessException.class)
-    public ResponseEntity<ErrorResponse<?>> handleException(DataAccessException e) {
+    public ResponseEntity<ErrorResponse<?>> handleApiException(DataAccessException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse.res(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse<?>> handleException(IllegalArgumentException e) {
-
+    public ResponseEntity<ErrorResponse<?>> handleApiException(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse.res(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
     }
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ErrorResponse<?>> handleException(Exception e) {
-
+    public ResponseEntity<ErrorResponse<?>> handleApiException(Exception e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.res(HttpStatus.BAD_REQUEST, e.getMessage()));
     }

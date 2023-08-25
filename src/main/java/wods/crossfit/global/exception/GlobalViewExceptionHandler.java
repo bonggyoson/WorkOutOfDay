@@ -1,31 +1,39 @@
 package wods.crossfit.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpServerErrorException.InternalServerError;
 import org.webjars.NotFoundException;
-import wods.crossfit.global.common.CommonResponse;
 
 @ControllerAdvice(annotations = Controller.class)
 @Slf4j
 public class GlobalViewExceptionHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<?> serverErrorHandler(Exception e) {
+    @ExceptionHandler(InternalServerError.class)
+    public String handleViewException(InternalServerError e, Model model) {
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(CommonResponse.res(HttpStatus.INTERNAL_SERVER_ERROR,
-                        e.getMessage()));
+        model.addAttribute("error", e.getMessage());
+
+        return "error/500";
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleViewException(IllegalArgumentException e, Model model) {
+
+        model.addAttribute("error", e.getMessage());
+
+        return "error/500";
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<?> notFoundExceptionHandler(Exception e) {
+    public String handleViewException(NotFoundException e, Model model) {
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(CommonResponse.res(HttpStatus.NOT_FOUND, e.getMessage()));
+        model.addAttribute("result", e.getMessage());
+
+        return "login/resetPassword";
     }
 
 }
