@@ -7,9 +7,9 @@ import org.webjars.NotFoundException;
 import wods.crossfit.benchmark.domain.Benchmark;
 import wods.crossfit.profile.domain.Profile;
 import wods.crossfit.profileBenchmark.domain.ProfileBenchmark;
-import wods.crossfit.profileBenchmark.domain.dto.ProfileBenchMarkDto;
-import wods.crossfit.profileBenchmark.domain.dto.ProfileBenchMarkDto.recordRequest;
+import wods.crossfit.profileBenchmark.domain.dto.ProfileBenchMarkDto.saveProfileBenchmarkRecordRequest;
 import wods.crossfit.benchmark.repository.BenchmarkRepository;
+import wods.crossfit.profileBenchmark.domain.dto.ProfileBenchMarkDto.saveProfileBenchmarkRequest;
 import wods.crossfit.profileBenchmark.repository.ProfileBenchmarkRepository;
 import wods.crossfit.profile.repository.ProfileRepository;
 import wods.crossfit.profileBenchmark.service.ProfileBenchmarkService;
@@ -26,7 +26,7 @@ public class ProfileBenchMarkServiceImpl implements ProfileBenchmarkService {
 
     @Override
     @Transactional
-    public void save(ProfileBenchMarkDto.saveRequest dto) {
+    public void save(saveProfileBenchmarkRequest dto) {
         Profile profile = profileRepository.findById(dto.getProfileId())
                 .orElseThrow(() -> new NotFoundException("해당 프로필이 존재하지 않습니다."));
 
@@ -40,7 +40,7 @@ public class ProfileBenchMarkServiceImpl implements ProfileBenchmarkService {
 
     @Override
     @Transactional
-    public void update(long id, recordRequest dto) {
+    public void update(long id, saveProfileBenchmarkRecordRequest dto) {
         ProfileBenchmark profileBenchmark = profileBenchMarkRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("해당 벤치마크가 존재하지 않습니다."));
 

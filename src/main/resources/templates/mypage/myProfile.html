@@ -21,7 +21,7 @@
               <div class="row">
                 <div class="fs-2 mb-3 col-4">
                   <img id="preview"
-                       th:src="*{storeFileName == null} ? '/static/img/profile.svg' : '/api/profile/images/' + *{storeFileName} + ''"
+                       th:src="*{storeFileName == null || storeFileName == ''} ? '/static/img/profile.svg' : '/api/profile/images/' + *{storeFileName} + ''"
                        width="150" height="150" alt=""/>
                 </div>
                 <div class="col-auto text-start align-self-center">

@@ -14,7 +14,7 @@ public class ProfileBenchMarkDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class saveRequest {
+    public static class saveProfileBenchmarkRequest {
 
         private List<Long> id;
         private long profileId;
@@ -30,7 +30,7 @@ public class ProfileBenchMarkDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class recordRequest {
+    public static class saveProfileBenchmarkRecordRequest {
 
         private String record;
 
@@ -45,13 +45,13 @@ public class ProfileBenchMarkDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class Response {
+    public static class ProfileBenchmarkResponse {
 
         private long id;
         private BenchmarkDto.BenchmarkResponse benchmark;
         private String record;
 
-        public Response(ProfileBenchmark profileBenchmark) {
+        public ProfileBenchmarkResponse(ProfileBenchmark profileBenchmark) {
             this.id = profileBenchmark.getId();
             this.benchmark = new BenchmarkDto.BenchmarkResponse(profileBenchmark.getBenchmark());
             this.record = profileBenchmark.getRecord();

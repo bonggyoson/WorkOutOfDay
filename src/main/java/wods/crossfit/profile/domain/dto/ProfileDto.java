@@ -7,9 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-import wods.crossfit.profileBenchmark.domain.dto.ProfileBenchMarkDto;
 import wods.crossfit.member.domain.Member;
 import wods.crossfit.profile.domain.Profile;
+import wods.crossfit.profileBenchmark.domain.dto.ProfileBenchMarkDto.ProfileBenchmarkResponse;
 
 public class ProfileDto {
 
@@ -73,7 +73,7 @@ public class ProfileDto {
         private String storeFileName;
         private String storePath;
         private String instagram;
-        private List<ProfileBenchMarkDto.Response> profileBenchmarks;
+        private List<ProfileBenchmarkResponse> profileBenchmarks;
 
         public ProfileResponse(Profile profile) {
             this.id = profile.getId();
@@ -84,7 +84,7 @@ public class ProfileDto {
             this.storePath = profile.getStorePath();
             this.instagram = profile.getInstagram();
             this.profileBenchmarks = profile.getProfileBenchmarks()
-                    .stream().map(ProfileBenchMarkDto.Response::new)
+                    .stream().map(ProfileBenchmarkResponse::new)
                     .collect(Collectors.toList());
         }
     }
