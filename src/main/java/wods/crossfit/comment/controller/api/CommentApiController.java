@@ -78,7 +78,6 @@ public class CommentApiController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CommonResponse.res(HttpStatus.OK, ResponseMessage.UPDATE_COMMENT));
-
     }
 
     /**
