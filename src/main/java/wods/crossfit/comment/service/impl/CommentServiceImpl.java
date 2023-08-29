@@ -37,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundException("해당하는 오늘의 운동이 없습니다."));
 
         Member member = memberRepository.findById(dto.getMemberId())
-                .orElseThrow(() -> new NotFoundException("회원이 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 회원은 존재하지 않습니다."));
 
         workout.increaseCommentCount();
 
