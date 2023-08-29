@@ -29,7 +29,7 @@ public class Hashtag extends BaseEntity {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workout_id")
+    @JoinColumn(name = "workout_id", nullable = false)
     private Workout workout;
 
     @Builder
