@@ -1,23 +1,53 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/wods
-    username: root
-    password: admin1234
+    driver-class-name: ${driver-class-name}
+    url: ${url}
+    username: ${username}
+    password: ${password}
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         show_sql: true
         format_sql: true
 
+  # 파일 업로드 설정
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   thymeleaf:
     cache: false
 
+  mvc:
+    static-path-pattern: /static/**
+
+# Swagger 설정
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    version: '@project.version@'
+    path: /swagger-ui.html
+    operations-sorter: method
+    disable-swagger-default-url: true
+    doc-expansion: none
+    display-request-duration: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  cache:
+    disabled: true
+
 logging:
   level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: info
+    org:
+      hibernate:
+        type:
+          descriptor.sql: trace
   config: classpath:logback-${spring.profiles.active}.xml
+
+file:
+  dir: /Users/bonggyoson/Develop/file/
