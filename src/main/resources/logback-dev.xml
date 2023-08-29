@@ -5,7 +5,7 @@
 
   <springProfile name="dev">
     <!-- log file path -->
-    <property name="LOG_PATH" value="/Users/bonggyoson/Develop/logs/dev"/>
+    <property name="LOG_PATH" value="/home/Ubuntu/logs/"/>
     <!-- log file name -->
     <property name="LOG_FILE_NAME" value="dev"/>
     <property name="LOG_PATTERN"

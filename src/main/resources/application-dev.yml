@@ -42,7 +42,7 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: info
-#  config: classpath:logback-${spring.profiles.active}.xml
+  config: classpath:logback-${spring.profiles.active}.xml
 
 file:
-  dir: /Users/bonggyoson/Develop/file/
+  dir: /home/ubuntu/file/
