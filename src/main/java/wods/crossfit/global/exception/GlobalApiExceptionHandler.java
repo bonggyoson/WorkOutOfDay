@@ -3,6 +3,7 @@ package wods.crossfit.global.exception;
 import javax.xml.bind.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,7 +34,7 @@ public class GlobalApiExceptionHandler {
                 .body(ErrorResponse.res(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
     }
 
-    @ExceptionHandler(ValidationException.class)
+    @ExceptionHandler({ValidationException.class, DuplicateKeyException.class})
     public ResponseEntity<ErrorResponse<?>> handleApiException(Exception e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.res(HttpStatus.BAD_REQUEST, e.getMessage()));
