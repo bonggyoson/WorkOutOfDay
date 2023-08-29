@@ -10,7 +10,7 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: my-wods-github-actions-s3-bucket
-  CODE_DEPLOY_APPLICATION_NAME: WokroutofDay
+  CODE_DEPLOY_APPLICATION_NAME: WorkoutofDay
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: my-codedeploy-deployment-group
 
 permissions:
