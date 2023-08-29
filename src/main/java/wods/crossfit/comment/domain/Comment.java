@@ -26,14 +26,14 @@ public class Comment extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "workout_id")
+    @JoinColumn(name = "workout_id", nullable = false)
     private Workout workout;
 
-    @Column(name = "comment_content")
+    @Column(name = "comment_content", nullable = false)
     private String content;
 
     public void update(String content) {

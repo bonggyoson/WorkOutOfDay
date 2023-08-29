@@ -2,6 +2,7 @@ package wods.crossfit.comment.domain.dto;
 
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,9 @@ public class CommentDto {
 
         @NotBlank(message = "댓글 내용은 필수 입니다.")
         private String content;
+        @NotNull(message = "회원 아이디는 필수 입니다.")
         private long memberId;
+        @NotNull(message = "오늘의 운동 아이디는 필수 입니다.")
         private long workoutId;
 
         public Comment toEntity(Workout workout, Member member) {
