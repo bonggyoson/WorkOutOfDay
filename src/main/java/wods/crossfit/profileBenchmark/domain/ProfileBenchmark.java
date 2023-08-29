@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,8 +19,8 @@ import wods.crossfit.profile.domain.Profile;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProfileBenchmark extends BaseEntity {
 
     @Id
@@ -28,11 +29,11 @@ public class ProfileBenchmark extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id")
+    @JoinColumn(name = "profile_id", nullable = false)
     private Profile profile;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "benchmark_id")
+    @JoinColumn(name = "benchmark_id", nullable = false)
     private Benchmark benchmark;
 
     @Column(name = "profile_benchmark_record")
