@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PROJECT_ROOT="/home/ubuntu/app/WorkOutOfDay"
+PROJECT_ROOT="/home/ubuntu/app"
 JAR_FILE="$PROJECT_ROOT/crossfit.jar"
 
 APP_LOG="$PROJECT_ROOT/application.log"
