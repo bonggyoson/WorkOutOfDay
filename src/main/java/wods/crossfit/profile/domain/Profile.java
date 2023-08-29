@@ -49,7 +49,7 @@ public class Profile extends BaseEntity {
     private String instagram;
 
     @OneToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @OneToMany(mappedBy = "profile")
