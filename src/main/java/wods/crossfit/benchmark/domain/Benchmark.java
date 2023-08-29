@@ -21,10 +21,10 @@ public class Benchmark extends BaseEntity {
     @Column(name = "benchmark_id")
     private Long id;
 
-    @Column(name = "benchmark_title")
+    @Column(name = "benchmark_title", nullable = false)
     private String title;
 
-    @Column(name = "benchmark_content")
+    @Column(name = "benchmark_content", nullable = false)
     private String content;
 
     @Builder
