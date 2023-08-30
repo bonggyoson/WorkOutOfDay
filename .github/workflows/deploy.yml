@@ -26,7 +26,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        token: ${{ secrets.SUBMODLE_TOKEN }}
+        token: ${{ secrets.SUBMODULE_TOKEN }}
         submodules: true
 
     # (2) JDK 11 세팅
