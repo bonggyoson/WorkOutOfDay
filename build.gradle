@@ -59,7 +59,9 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-task copySubmodule(type: Copy) {
+processResources.dependsOn('copySecret')
+
+tasks.register('copySecret', Copy) {
     from './wods-private'
     include '*.yml'
     into './src/main/resources'
