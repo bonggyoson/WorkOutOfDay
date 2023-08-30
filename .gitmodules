@@ -1,0 +1,4 @@
+[submodule "wods-private"]
+	path = wods-private
+	url = https://github.com/bonggyoson/wods-private.git
+	branch = master
