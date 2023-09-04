@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import wods.crossfit.global.common.CommonResponse;
 import wods.crossfit.global.common.ErrorResponse;
 import wods.crossfit.global.common.ResponseMessage;
-import wods.crossfit.hashtag.service.HashtagService;
 import wods.crossfit.workout.domain.dto.WorkoutDto.WorkoutRequest;
 import wods.crossfit.workout.domain.dto.WorkoutDto.WorkoutResponse;
 import wods.crossfit.workout.service.WorkoutService;
@@ -29,8 +28,6 @@ import wods.crossfit.workout.service.WorkoutService;
 public class WorkoutApiController {
 
     private final WorkoutService workoutService;
-
-    private final HashtagService hashtagService;
 
     /**
      * 오늘의 운동 저장
@@ -49,9 +46,7 @@ public class WorkoutApiController {
             throw new ValidationException(ResponseMessage.CREATED_WORKOUT_FAIL);
         }
 
-        long id = workoutService.saveWorkout(dto);
-
-        hashtagService.saveHashtag(dto.getHashtag(), id);
+        workoutService.saveWorkout(dto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(CommonResponse.res(HttpStatus.CREATED, ResponseMessage.CREATED_WORKOUT));

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,11 +15,13 @@ import wods.crossfit.hashtag.domain.dto.HashtagDto;
 import wods.crossfit.member.domain.Member;
 import wods.crossfit.member.domain.dto.MemberDto.MemberResponse;
 import wods.crossfit.workout.domain.Workout;
+import wods.crossfit.workoutHashtag.domain.dto.WorkoutHashtagDto.WorkoutHashtagResponse;
 
 public class WorkoutDto {
 
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class WorkoutRequest {
 
         @NotBlank(message = "제목을 입력해주세요")
@@ -29,7 +32,7 @@ public class WorkoutDto {
         @Schema(name = "content", example = "21-15-9 THRUSTERS PULL-UPS ")
         private String content;
 
-        @Schema(name = "hashtag", example = "#Crossfit")
+        @Schema(name = "hashtag", example = "Crossfit")
         private List<HashtagDto.HashtagRequest> hashtag;
 
         @NotNull
@@ -52,14 +55,13 @@ public class WorkoutDto {
         private Long id;
         private String title;
         private String content;
-        private String hashtag;
         private Long views;
         private Long heartCount;
         private MemberResponse member;
         private List<CommentResponse> comments;
         private LocalDateTime createdAt;
         private Long commentCount;
-        private List<HashtagDto.HashtagResponse> hashtags;
+        private List<WorkoutHashtagResponse> workoutHashtags;
 
         public static WorkoutResponse of(Workout workout) {
             return WorkoutResponse.builder()
@@ -70,12 +72,12 @@ public class WorkoutDto {
                     .heartCount(workout.getHeartCount())
                     .member(new MemberResponse(workout.getMember()))
                     .comments(workout.getComments().stream()
-                            .map(CommentResponse::new).collect(
-                                    Collectors.toList()))
+                            .map(CommentResponse::new)
+                            .collect(Collectors.toList()))
                     .createdAt(workout.getCreatedAt())
                     .commentCount(workout.getCommentCount())
-                    .hashtags(workout.getHashtags().stream()
-                            .map(HashtagDto.HashtagResponse::new)
+                    .workoutHashtags(workout.getHashtags().stream()
+                            .map(WorkoutHashtagResponse::new)
                             .collect(Collectors.toList()))
                     .build();
         }

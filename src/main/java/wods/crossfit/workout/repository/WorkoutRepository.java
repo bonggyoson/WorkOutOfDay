@@ -18,7 +18,7 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long> {
 
     Page<Workout> findByMember_NameContaining(String keyword, Pageable pageable);
 
-    @Query("select w from Workout w join Hashtag h on w.id = h.workout.id where h.content like %:hashtag%")
+    @Query("select w from Workout w join WorkoutHashtag wh on w.id = wh.workout.id join Hashtag h on wh.hashtag.id = h.id where h.content = :hashtag")
     Page<Workout> findByHashtags(@Param("hashtag") String hashtag, Pageable pageable);
 
     Page<Workout> findAllByMemberId(Pageable pageable, long id);

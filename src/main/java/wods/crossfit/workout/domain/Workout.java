@@ -8,12 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import wods.crossfit.comment.domain.Comment;
-import wods.crossfit.hashtag.domain.Hashtag;
 import wods.crossfit.heart.domain.Heart;
 import wods.crossfit.global.common.BaseEntity;
 
 import javax.persistence.*;
 import wods.crossfit.member.domain.Member;
+import wods.crossfit.workoutHashtag.domain.WorkoutHashtag;
 
 @Entity
 @Getter
@@ -54,7 +54,7 @@ public class Workout extends BaseEntity {
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("id asc")
-    private List<Hashtag> hashtags = new ArrayList<>();
+    private List<WorkoutHashtag> hashtags = new ArrayList<>();
 
     @Builder
     public Workout(String title, String content, Member member, long views,

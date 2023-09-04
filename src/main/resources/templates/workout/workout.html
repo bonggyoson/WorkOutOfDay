@@ -86,7 +86,8 @@
                   <small class="text-body-secondary" th:text="${workout.id}"></small>
                 </div>
                 <div class="col-auto">
-                  <small class="text-body-secondary" th:text="${workout.member.name} + ' |'"></small>
+                  <small class="text-body-secondary"
+                         th:text="${workout.member.name} + ' |'"></small>
                   <small
                       class="text-body-secondary text-end"
                       th:text="|${#temporals.format(workout.createdAt, 'yyyy.MM.dd HH:mm:ss')}|"></small>
@@ -94,7 +95,8 @@
               </div>
               <div class="row mb-3">
                 <div class="col">
-                  <a th:href="@{/workout/{id}(id=${workout.id})}" class="link fw-bold text-decoration-none"
+                  <a th:href="@{/workout/{id}(id=${workout.id})}"
+                     class="link fw-bold text-decoration-none"
                      th:text="${workout.title}"></a>
                 </div>
               </div>
@@ -128,11 +130,11 @@
               </div>
               <div class="row">
                 <div class="col text-start scrollbar">
-                  <th:block th:if="${workout.hashtags.size() != 0}">
-                    <a th:each="hashtag : ${workout.hashtags}"
+                  <th:block th:if="${workout.workoutHashtags.size() != 0}">
+                    <a th:each="hashtag : ${workout.workoutHashtags}"
                        class="link-secondary fw-bold me-2 text-decoration-none"
-                       th:href="@{/workout(hashtag=${hashtag.content})}"
-                       th:text="|#${hashtag.content} |"></a>
+                       th:href="@{/workout(hashtag=${hashtag.hashtag.content})}"
+                       th:text="|#${hashtag.hashtag.content} |"></a>
                   </th:block>
                 </div>
               </div>

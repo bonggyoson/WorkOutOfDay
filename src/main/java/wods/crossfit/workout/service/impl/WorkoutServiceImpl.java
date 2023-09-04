@@ -1,6 +1,5 @@
 package wods.crossfit.workout.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
-import wods.crossfit.hashtag.domain.Hashtag;
-import wods.crossfit.hashtag.domain.dto.HashtagDto;
 import wods.crossfit.hashtag.repository.HashtagRepository;
+import wods.crossfit.hashtag.service.HashtagService;
 import wods.crossfit.member.domain.Member;
 import wods.crossfit.workout.domain.Workout;
 import wods.crossfit.member.repository.MemberRepository;
@@ -22,6 +20,8 @@ import wods.crossfit.workout.domain.dto.WorkoutDto.WorkoutRequest;
 import wods.crossfit.workout.domain.dto.WorkoutDto.WorkoutResponse;
 import wods.crossfit.workout.repository.WorkoutRepository;
 import wods.crossfit.workout.service.WorkoutService;
+import wods.crossfit.workoutHashtag.domain.dto.WorkoutHashtagDto.WorkoutHashtagResponse;
+import wods.crossfit.workoutHashtag.repository.WorkoutHashtagRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +33,11 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final MemberRepository memberRepository;
 
     private final HashtagRepository hashtagRepository;
+
+    private final HashtagService hashtagService;
+
+    private final WorkoutHashtagRepository workoutHashtagRepository;
+
 
     @Override
     public Page<WorkoutResponse> getWorkouts(Pageable pageable, String keyword,
@@ -83,9 +88,12 @@ public class WorkoutServiceImpl implements WorkoutService {
         Member member = memberRepository.findById(dto.getMemberId())
                 .orElseThrow(() -> new NotFoundException("해당 회원은 존재하지 않습니다."));
 
-        return workoutRepository.save(dto.toEntity(member)).getId();
-    }
+        long savedWorkoutId = workoutRepository.save(dto.toEntity(member)).getId();
 
+        hashtagService.saveHashtag(dto.getHashtag(), savedWorkoutId);
+
+        return savedWorkoutId;
+    }
 
     @Override
     @Transactional
@@ -95,18 +103,14 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         workout.update(dto.getTitle(), dto.getContent());
 
-        List<Hashtag> hashtag = hashtagRepository.findByWorkoutId(workout.getId());
-
-        for (Hashtag tag : hashtag) {
-            hashtagRepository.deleteById(tag.getId());
+        List<WorkoutHashtagResponse> hashtag = workoutHashtagRepository.findByWorkoutId(
+                workout.getId());
+        for (WorkoutHashtagResponse workoutHashtagResponse : hashtag) {
+            workoutHashtagRepository.deleteByWorkoutId(workout.getId());
+            hashtagRepository.deleteById(workoutHashtagResponse.getHashtag().getId());
         }
 
-        List<Hashtag> tags = new ArrayList<>();
-        for (HashtagDto.HashtagRequest tag : dto.getHashtag()) {
-            tags.add(new HashtagDto.HashtagRequest().toEntity(tag.getContent(),
-                    workout));
-        }
-        hashtagRepository.saveAll(tags);
+        hashtagService.saveHashtag(dto.getHashtag(), workout.getId());
 
     }
 

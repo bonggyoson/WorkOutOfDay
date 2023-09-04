@@ -18,6 +18,7 @@ import wods.crossfit.hashtag.domain.dto.HashtagDto.HashtagResponse;
 import wods.crossfit.profile.domain.dto.ProfileDto.ProfileResponse;
 import wods.crossfit.profile.service.ProfileService;
 import wods.crossfit.workout.service.WorkoutService;
+import wods.crossfit.workoutHashtag.domain.dto.WorkoutHashtagDto.WorkoutHashtagResponse;
 
 @Controller
 @RequiredArgsConstructor
@@ -68,8 +69,8 @@ public class MyPageViewController {
     public String updateMyWorkout(Model model, @PathVariable long id) {
 
         model.addAttribute("workout", workoutService.getWorkout(id));
-        model.addAttribute("hashtags", workoutService.getWorkout(id).getHashtags().stream()
-                .map(HashtagResponse::getContent).collect(
+        model.addAttribute("hashtags", workoutService.getWorkout(id).getWorkoutHashtags().stream()
+                .map(WorkoutHashtagResponse::getHashtag).map(HashtagResponse::getContent).collect(
                         Collectors.toList()));
 
         return "mypage/updateWorkoutForm";

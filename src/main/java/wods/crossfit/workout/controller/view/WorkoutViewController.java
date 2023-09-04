@@ -3,7 +3,6 @@ package wods.crossfit.workout.controller.view;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import wods.crossfit.hashtag.service.HashtagService;
 import wods.crossfit.member.domain.Member;
 import wods.crossfit.heart.service.HeartService;
 import wods.crossfit.profile.domain.dto.ProfileDto.ProfileResponse;
@@ -32,8 +30,6 @@ public class WorkoutViewController {
 
     private final ProfileService profileService;
 
-    private final HashtagService hashtagService;
-
     /**
      * 오늘의 운동 페이지
      */
@@ -46,7 +42,6 @@ public class WorkoutViewController {
 
         model.addAttribute("workouts", workoutService.getWorkouts(pageable, keyword,
                 type, sort, hashtag));
-        model.addAttribute("hashtags", hashtagService.getHashtags());
         model.addAttribute("keyword", keyword);
         model.addAttribute("type", type);
         model.addAttribute("sort", sort);

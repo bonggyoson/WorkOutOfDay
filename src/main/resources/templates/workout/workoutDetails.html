@@ -120,11 +120,11 @@
     </div>
     <div class="row">
       <div class="col text-start mb-2">
-        <th:block th:if="${workout.hashtags.size() != 0}">
-          <a th:each="hashtag : ${workout.hashtags}"
+        <th:block th:if="${workout.workoutHashtags.size() != 0}">
+          <a th:each="hashtag : ${workout.workoutHashtags}"
              class="link-secondary fw-bold text-decoration-none"
-             th:href="@{/workout(hashtag=${hashtag.content})}"
-             th:text="|#${hashtag.content} |"></a>
+             th:href="@{/workout(hashtag=${hashtag.hashtag.content})}"
+             th:text="|#${hashtag.hashtag.content} |"></a>
         </th:block>
       </div>
     </div>
