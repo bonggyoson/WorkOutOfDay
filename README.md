@@ -30,7 +30,8 @@
 ![스크린샷 2023-08-31 오전 10 42 58](https://github.com/bonggyoson/WorkOutOfDay/assets/77199221/5c6e87fe-5cf7-4d5d-a77c-a60875ceffdc)
 
 ### Feature
+![image](https://github.com/bonggyoson/WorkOutOfDay/assets/77199221/4b8c3240-b43a-4d45-b435-e2d5f3338b2e)
 
+### UI
+[WorkoutOfDay 5580114bf08346f3bd0503ee60dfa6e3.pdf](https://github.com/bonggyoson/WorkOutOfDay/files/12518926/WorkoutOfDay.5580114bf08346f3bd0503ee60dfa6e3.pdf)
 
-### Refactoring
-- ...
