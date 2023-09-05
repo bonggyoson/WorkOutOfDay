@@ -14,10 +14,10 @@ public class HashtagDto {
     public static class HashtagRequest {
 
         private String content;
-        public Hashtag toEntity(String content, Workout workout) {
+
+        public Hashtag toEntity(String content) {
             return Hashtag.builder()
                     .content(content)
-                    .workout(workout)
                     .build();
         }
     }
@@ -29,12 +29,10 @@ public class HashtagDto {
 
         private long id;
         private String content;
-        private long workoutId;
 
         public HashtagResponse(Hashtag hashtag) {
             this.id = hashtag.getId();
             this.content = hashtag.getContent();
-            this.workoutId = hashtag.getWorkout().getId();
         }
     }
 

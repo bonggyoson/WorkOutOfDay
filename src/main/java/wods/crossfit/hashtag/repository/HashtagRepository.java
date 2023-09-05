@@ -10,5 +10,4 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
     @Query("select distinct h.content from Hashtag h")
     List<String> findHashtags();
 
-    List<Hashtag> findByWorkoutId(long id);
 }
