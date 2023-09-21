@@ -7,11 +7,22 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
         format_sql: true
+
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: ${client-id}
+#            client-secret: ${client-secret}
+#            scope:
+#              - email
+#              - profile
 
   # 파일 업로드 설정
   servlet:
@@ -24,6 +35,12 @@ spring:
 
   mvc:
     static-path-pattern: /static/**
+
+jwt:
+  issuer: bonggyoson@gmail.com
+  secret_key: jwt-token
+  access-token-expiration-time: 360000
+  refresh-token-expiration-time: 360000
 
 # Swagger 설정
 springdoc:
@@ -46,8 +63,11 @@ logging:
     org:
       hibernate:
         type:
-          descriptor.sql: trace
+          descriptor.sql: debug
   config: classpath:logback-${spring.profiles.active}.xml
 
 file:
   dir: /Users/bonggyoson/Develop/file/
+
+server:
+  port: 8081
