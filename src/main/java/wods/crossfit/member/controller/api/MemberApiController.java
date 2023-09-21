@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.ValidationException;
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,7 +38,7 @@ import wods.crossfit.member.service.MemberService;
 @Tag(name = "회원 API Controller")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/member")
+@RequestMapping("/api/members")
 @Slf4j
 public class MemberApiController {
 
@@ -47,7 +49,7 @@ public class MemberApiController {
     /**
      * 회원 가입
      */
-    @Operation(summary = "post save member api", responses = {
+    @Operation(summary = "post save members api", responses = {
             @ApiResponse(responseCode = "201", description = "회원 가입 성공"),
             @ApiResponse(responseCode = "400", description = "회원 가입 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "회원 가입 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
@@ -65,6 +67,30 @@ public class MemberApiController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(CommonResponse.res(HttpStatus.CREATED, ResponseMessage.CREATED_MEMBER));
+    }
+
+    /**
+     * 회원 조회
+     */
+    @GetMapping("")
+    public ResponseEntity<CommonResponse<List<MemberResponse>>> findMembers() {
+
+        List<MemberResponse> members = memberService.findMembers();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CommonResponse.res(HttpStatus.OK, ResponseMessage.FOUND_MEMBER, members));
+    }
+
+    /**
+     * 회원 단건 조회
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<CommonResponse<MemberResponse>> findMember(@PathVariable long id) {
+
+        MemberResponse member = memberService.findById(id);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CommonResponse.res(HttpStatus.OK, ResponseMessage.FOUND_MEMBER, member));
     }
 
     /**
