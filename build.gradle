@@ -1,7 +1,15 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.13'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    // querydsl 추가
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 bootJar {
@@ -45,14 +53,23 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
     implementation 'net.datafaker:datafaker:2.0.1'
     implementation 'org.jsoup:jsoup:1.15.3'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'com.auth0:java-jwt:4.0.0'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    //querydsl 추가
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 
     runtimeOnly 'com.mysql:mysql-connector-j'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {
@@ -65,4 +82,23 @@ tasks.register('copySecret', Copy) {
     from './wods-private'
     include '*.yml'
     into './src/main/resources'
+}
+
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
 }
