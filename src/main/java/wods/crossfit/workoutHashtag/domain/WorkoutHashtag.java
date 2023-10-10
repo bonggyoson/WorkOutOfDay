@@ -1,5 +1,6 @@
 package wods.crossfit.workoutHashtag.domain;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 import wods.crossfit.global.common.BaseEntity;
 import wods.crossfit.hashtag.domain.Hashtag;
 import wods.crossfit.workout.domain.Workout;
+import wods.crossfit.workoutHashtag.domain.dto.WorkoutHashtagDto;
 
 @Entity
 @Getter
@@ -41,4 +43,5 @@ public class WorkoutHashtag extends BaseEntity {
         this.workout = workout;
         this.hashtag = hashtag;
     }
+
 }

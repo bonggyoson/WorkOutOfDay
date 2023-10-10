@@ -1,5 +1,7 @@
 package wods.crossfit.workoutHashtag.domain.dto;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +27,14 @@ public class WorkoutHashtagDto {
                     .workout(workout)
                     .hashtag(hashtag)
                     .build();
+        }
+
+        public List<WorkoutHashtag> toEntity(Workout workout, List<Hashtag> hashtags) {
+            List<WorkoutHashtag> workoutHashtags = new ArrayList<>();
+            for (Hashtag hashtag : hashtags) {
+                workoutHashtags.add(new WorkoutHashtagRequest().toEntity(workout, hashtag));
+            }
+            return workoutHashtags;
         }
     }
 
