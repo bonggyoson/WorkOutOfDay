@@ -1,0 +1,37 @@
+<!-- config -->
+<th:block th:replace="fragment/config :: configFragment"></th:block>
+<body>
+<!-- header -->
+<th:block th:replace="fragment/header :: headerFragment"></th:block>
+<div class="container">
+  <div class="p-3 text-center bg-body-tertiary rounded-3">
+    <div class="row">
+      <th:block th:replace="fragment/adminPageSide :: adminPageSideFragment"></th:block>
+      <div class="col-md-7 col-lg-10">
+        <h4 class="mb-3">박스 목록</h4>
+        <hr>
+        <table class="table table-responsive caption-top">
+          <caption>박스 수 - [[${members.size}]]</caption>
+          <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">이메일</th>
+            <th scope="col">이름</th>
+            <th scope="col">박스</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="member : ${members}">
+            <th th:text="${member.id}"></th>
+            <td th:text="${member.email}"></td>
+            <td th:text="${member.name}"></td>
+            <td th:text="${member.box}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<th:block th:replace="fragment/footer :: footerFragment"></th:block>
+</body>

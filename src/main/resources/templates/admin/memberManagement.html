@@ -1,0 +1,81 @@
+<!-- config -->
+<th:block th:replace="fragment/config :: configFragment"></th:block>
+<body>
+<!-- header -->
+<th:block th:replace="fragment/header :: headerFragment"></th:block>
+<div class="container">
+  <div class="p-3 text-center bg-body-tertiary rounded-3">
+    <div class="row">
+      <th:block th:replace="fragment/adminPageSide :: adminPageSideFragment"></th:block>
+      <div class="col-md-7 col-lg-10">
+        <h4 class="mb-3">회원 목록</h4>
+        <form th:action="@{'/admin/members'}" role="search"
+              class="row g-2 container-fluid justify-content-md-center" method="get">
+          <div class="col-auto">
+            <select name="type" class="form-select" aria-label="select" th:value="${type}">
+              <option th:selected="${type} == 'email'" value="email">이메일</option>
+              <option th:selected="${type} == 'name'" value="name">이름</option>
+              <option th:selected="${type} == 'box'" value="box">박스</option>
+            </select>
+          </div>
+          <div class="col">
+            <input class="form-control me-2"
+                   th:name="${type}"
+                   placeholder="검색"
+                   aria-label="Search">
+          </div>
+          <div class="col-auto">
+            <button class="btn btn-outline-success" type="submit">검색</button>
+          </div>
+        </form>
+        <hr>
+        <table class="table table-hover table-responsive caption-top">
+          <caption>회원 수 - [[${members.size}]]</caption>
+          <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">이메일</th>
+            <th scope="col">이름</th>
+            <th scope="col">박스</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="member : ${members}"
+              th:onclick="|location.href='@{/admin/members/{id}(id=${member.id})}'|">
+            <td th:text="${member.id}"></td>
+            <td th:text="${member.email}"></td>
+            <td th:text="${member.name}"></td>
+            <td th:text="${member.box}"></td>
+          </tr>
+          </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center p-5"
+              th:with="start=${T(java.lang.Math).floor(members.number/10)*10 + 1}, last=(${start + 9 < members.totalPages ? start + 9 : members.totalPages})">
+            <li class="page-item">
+              <a class="page-link"
+                 th:href="@{/admin/members(page=1)}" aria-label="First">맨 앞</a>
+            </li>
+            <li class="page-item" th:class="${members.first} ? 'disabled'">
+              <a class="page-link"
+                 th:href="${members.first} ? '#' : @{/admin/members(page=${members.number})}">&lt;</a>
+            </li>
+            <li class="page-item" th:each="page : ${#numbers.sequence(start, last)}"
+                th:class="${page == members.number + 1} ? 'active'">
+              <a class="page-link" th:href="@{/admin/members(page=${page})}" th:text="${page}"></a>
+            </li>
+            <li class="page-item" th:class="${members.last} ? 'disabled'">
+              <a class="page-link"
+                 th:href="${members.last} ? '#' : @{/admin/members(page=${members.number + 2})}">&gt;</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" th:href="@{/admin/members(page=${members.totalPages})}">맨 뒤</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<th:block th:replace="fragment/footer :: footerFragment"></th:block>
+</body>
