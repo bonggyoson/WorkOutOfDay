@@ -56,25 +56,6 @@ const login = document.getElementById('login');
 
 if (login) {
   login.addEventListener("click", () => {
-    // body = JSON.stringify({
-    //   email: document.getElementById('username').value,
-    //   password: document.getElementById('password').value,
-    // });
-    //
-    // function success() {
-    //   location.replace("/");
-    // }
-    //
-    // function fail() {
-    //   swal({
-    //     title: "WORK OUT OF DAY",
-    //     text: "가입되지 않은 계정이거나 \n 아이디 또는 패스워드를 잘못 입력하셨습니다.",
-    //     icon: "error",
-    //     button: false,
-    //   });
-    // }
-    //
-    // httpRequest("POST", "/login", body, success, fail);
 
     fetch(`/login`, {
       method: "POST",
@@ -119,6 +100,7 @@ if (updateMember) {
           password: document.getElementById('password').value,
           name: document.getElementById('name').value,
           box: document.getElementById('box').value,
+          role: document.getElementById('role').value,
         }),
       }).then((response) => {
         response.json()
@@ -174,7 +156,7 @@ if (deleteMember) {
               icon: "success"
             });
             setTimeout(() => {
-              location.replace("/");
+              location.replace("/logout");
             }, 1500);
           })
         })
