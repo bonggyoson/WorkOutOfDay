@@ -2,6 +2,7 @@ package wods.crossfit.workout.service.impl;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,19 +10,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.webjars.NotFoundException;
-import wods.crossfit.hashtag.repository.HashtagRepository;
+import wods.crossfit.hashtag.domain.Hashtag;
 import wods.crossfit.hashtag.service.HashtagService;
 import wods.crossfit.member.domain.Member;
 import wods.crossfit.workout.domain.Workout;
 import wods.crossfit.member.repository.MemberRepository;
-import wods.crossfit.workout.domain.dto.WorkoutDto;
 import wods.crossfit.workout.domain.dto.WorkoutDto.WorkoutRequest;
 import wods.crossfit.workout.domain.dto.WorkoutDto.WorkoutResponse;
 import wods.crossfit.workout.repository.WorkoutRepository;
 import wods.crossfit.workout.service.WorkoutService;
-import wods.crossfit.workoutHashtag.domain.dto.WorkoutHashtagDto.WorkoutHashtagResponse;
-import wods.crossfit.workoutHashtag.repository.WorkoutHashtagRepository;
+import wods.crossfit.workoutHashtag.service.WorkoutHashtagService;
 
 @Service
 @RequiredArgsConstructor
@@ -32,12 +30,9 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     private final MemberRepository memberRepository;
 
-    private final HashtagRepository hashtagRepository;
-
     private final HashtagService hashtagService;
 
-    private final WorkoutHashtagRepository workoutHashtagRepository;
-
+    private final WorkoutHashtagService workoutHashtagService;
 
     @Override
     public Page<WorkoutResponse> getWorkouts(Pageable pageable, String keyword,
@@ -74,7 +69,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Transactional
     public WorkoutResponse getWorkout(long id) {
         Workout workout = workoutRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 게시글은 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글은 존재하지 않습니다."));
 
         // 조회수 업데이트
         workout.updateViewCount(workout.getViews());
@@ -84,13 +79,19 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     @Transactional
-    public long saveWorkout(WorkoutDto.WorkoutRequest dto) {
+    public long saveWorkout(WorkoutRequest dto) {
         Member member = memberRepository.findById(dto.getMemberId())
-                .orElseThrow(() -> new NotFoundException("해당 회원은 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format("Not Found Id : [%S]", dto.getMemberId())));
 
+        // 오늘의 운동 저장
         long savedWorkoutId = workoutRepository.save(dto.toEntity(member)).getId();
 
-        hashtagService.saveHashtag(dto.getHashtag(), savedWorkoutId);
+        // 해시 태그 저장
+        List<Hashtag> hashtags = hashtagService.saveHashtag(dto.getHashtag());
+
+        // 오늘의 운동 - 해시 태그 저장
+        workoutHashtagService.saveWorkoutHashtag(savedWorkoutId, hashtags);
 
         return savedWorkoutId;
     }
@@ -99,18 +100,23 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Transactional
     public void updateWorkout(long id, WorkoutRequest dto) {
         Workout workout = workoutRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 게시글은 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format("Not Found Id : [%S]", dto.getMemberId())));
 
+        // 오늘의 운동 수정
         workout.update(dto.getTitle(), dto.getContent());
 
-        List<WorkoutHashtagResponse> hashtag = workoutHashtagRepository.findByWorkoutId(
-                workout.getId());
-        for (WorkoutHashtagResponse workoutHashtagResponse : hashtag) {
-            workoutHashtagRepository.deleteByWorkoutId(workout.getId());
-            hashtagRepository.deleteById(workoutHashtagResponse.getHashtag().getId());
-        }
+        // 해시 태그 수정
+        List<Hashtag> hashtags = hashtagService.updateHashtag(workout.getId(), dto.getHashtag());
 
-        hashtagService.saveHashtag(dto.getHashtag(), workout.getId());
+//        List<WorkoutHashtagResponse> hashtag = workoutHashtagRepository.findByWorkoutId(
+//                workout.getId());
+//        for (WorkoutHashtagResponse workoutHashtagResponse : hashtag) {
+//            workoutHashtagRepository.deleteByWorkoutId(workout.getId());
+//            hashtagRepository.deleteById(workoutHashtagResponse.getHashtag().getId());
+//        }
+
+//        hashtagService.saveHashtag(dto.getHashtag(), workout.getId());
 
     }
 
@@ -127,5 +133,16 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         return workoutRepository.findAllByMemberId(pageable, id)
                 .map(WorkoutResponse::of);
+    }
+
+    @Override
+    public List<WorkoutResponse> findWorkouts() {
+        return workoutRepository.findAll().stream().map(WorkoutResponse::of)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public WorkoutResponse findHotWorkout() {
+        return WorkoutResponse.of(workoutRepository.findViewTopWorkout());
     }
 }

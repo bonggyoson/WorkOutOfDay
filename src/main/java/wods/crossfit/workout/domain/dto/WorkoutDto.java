@@ -11,7 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import wods.crossfit.comment.domain.dto.CommentDto.CommentResponse;
-import wods.crossfit.hashtag.domain.dto.HashtagDto;
+import wods.crossfit.hashtag.domain.dto.HashtagDto.HashtagRequest;
 import wods.crossfit.member.domain.Member;
 import wods.crossfit.member.domain.dto.MemberDto.MemberResponse;
 import wods.crossfit.workout.domain.Workout;
@@ -33,7 +33,7 @@ public class WorkoutDto {
         private String content;
 
         @Schema(name = "hashtag", example = "Crossfit")
-        private List<HashtagDto.HashtagRequest> hashtag;
+        private List<HashtagRequest> hashtag;
 
         @NotNull
         @Schema(name = "memberId", example = "1")
