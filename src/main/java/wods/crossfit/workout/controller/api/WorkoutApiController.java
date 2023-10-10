@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import javax.xml.bind.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,7 @@ import wods.crossfit.workout.service.WorkoutService;
 @Tag(name = "오늘의 운동 API Controller")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/workout")
+@RequestMapping("/api/workouts")
 @Slf4j
 public class WorkoutApiController {
 
@@ -39,11 +38,10 @@ public class WorkoutApiController {
     })
     @PostMapping("")
     public ResponseEntity<CommonResponse<WorkoutResponse>> saveWorkout(
-            @Validated @RequestBody final WorkoutRequest dto, BindingResult bindingResult)
-            throws ValidationException {
+            @Validated @RequestBody final WorkoutRequest dto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            throw new ValidationException(ResponseMessage.CREATED_WORKOUT_FAIL);
+            throw new IllegalArgumentException(ResponseMessage.CREATED_WORKOUT_FAIL);
         }
 
         workoutService.saveWorkout(dto);
@@ -62,11 +60,10 @@ public class WorkoutApiController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<CommonResponse<WorkoutResponse>> updateWorkout(@PathVariable long id,
-            @Validated @RequestBody final WorkoutRequest dto, BindingResult bindingResult)
-            throws ValidationException {
+            @Validated @RequestBody final WorkoutRequest dto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            throw new ValidationException(ResponseMessage.UPDATE_COMMENT_FAIL);
+            throw new IllegalArgumentException(ResponseMessage.UPDATE_COMMENT_FAIL);
         }
 
         workoutService.updateWorkout(id, dto);

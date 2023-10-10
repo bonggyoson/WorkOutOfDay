@@ -1,5 +1,8 @@
 package wods.crossfit.member.controller.view;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
@@ -36,17 +39,6 @@ public class MemberViewController {
         model.addAttribute("exception", exception);
 
         return "login/login";
-    }
-
-    /**
-     * 로그아웃
-     */
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
-        new SecurityContextLogoutHandler().logout(request, response,
-                SecurityContextHolder.getContext().getAuthentication());
-
-        return "redirect:/login";
     }
 
     /**

@@ -5,7 +5,7 @@ if (saveMember) {
   saveMember.addEventListener("click", () => {
 
     if (emptyMemberFormChecking.check()) {
-      fetch("/api/member", {
+      fetch("/api/members", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,6 +51,36 @@ if (saveMember) {
   });
 }
 
+// 로그인
+const login = document.getElementById('login');
+
+if (login) {
+  login.addEventListener("click", () => {
+
+    fetch(`/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: document.getElementById('username').value,
+        password: document.getElementById('password').value,
+      }),
+    }).then((response) => {
+      if (response.status === 200) {
+        location.replace("/");
+      } else {
+        swal({
+          title: "WORK OUT OF DAY",
+          text: "가입되지 않은 계정이거나 \n 아이디 또는 패스워드를 잘못 입력하셨습니다.",
+          icon: "error",
+          button: false,
+        });
+      }
+    })
+  })
+}
+
 // 회원 수정
 const updateMember = document.getElementById('update-member');
 
@@ -60,7 +90,7 @@ if (updateMember) {
     let id = document.getElementById('id').value;
 
     if (emptyMemberFormChecking.check()) {
-      fetch(`/api/member/${id}`, {
+      fetch(`/api/members/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -70,6 +100,7 @@ if (updateMember) {
           password: document.getElementById('password').value,
           name: document.getElementById('name').value,
           box: document.getElementById('box').value,
+          role: document.getElementById('role').value,
         }),
       }).then((response) => {
         response.json()
@@ -114,7 +145,7 @@ if (deleteMember) {
     })
     .then((result) => {
       if (result) {
-        fetch(`/api/member/${id}`, {
+        fetch(`/api/members/${id}`, {
           method: 'DELETE'
         })
         .then((response) => {
@@ -125,7 +156,7 @@ if (deleteMember) {
               icon: "success"
             });
             setTimeout(() => {
-              location.replace("/");
+              location.replace("/logout");
             }, 1500);
           })
         })
@@ -174,4 +205,44 @@ const emptyMemberFormChecking = {
 
     return true;
   }
+}
+
+// 쿠키를 가져오는 함수
+function getCookie(key) {
+  let result = null;
+  let cookie = document.cookie.split(";");
+  cookie.some(function (item) {
+    item = item.replace(" ", "");
+
+    let dic = item.split("=");
+
+    if (key === dic[0]) {
+      result = dic[1];
+      return true;
+    }
+  });
+
+  return result;
+}
+
+function httpRequest(method, url, body, success, fail) {
+  fetch(url, {
+    method: method,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access_token"),
+      "Content-Type": "application/json",
+    },
+    body: body,
+  }).then((response) => {
+    response.json().then(data => {
+      if (data.status === 'OK') {
+        // localStorage.setItem("access_token", data.data.accessToken);
+        // localStorage.setItem("refresh_token", data.data.refreshToken);
+        success();
+      } else {
+        fail();
+      }
+    });
+    const refresh_token = getCookie("refresh_token");
+  })
 }

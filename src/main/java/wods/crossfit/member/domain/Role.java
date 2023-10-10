@@ -1,17 +1,20 @@
 package wods.crossfit.member.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 public enum Role {
 
-    ROLE_ADMIN("관리자"), ROLE_MANAGER("매니저"), ROLE_MEMBER("일반사용자");
+    ROLE_MEMBER("ROLE_MEMBER"),
+    ROLE_ADMIN("ROLE_ADMIN");
 
-    private final String description;
+    String role;
 
-    Role(String description) {
-        this.description = description;
+    Role(String role) {
+        this.role = role;
     }
 
+    public String value() {
+        return role;
+    }
 }

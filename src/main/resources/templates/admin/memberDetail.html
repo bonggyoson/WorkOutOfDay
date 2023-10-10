@@ -1,0 +1,60 @@
+<!-- config -->
+<th:block th:replace="fragment/config :: configFragment"></th:block>
+<body>
+<!-- header -->
+<th:block th:replace="fragment/header :: headerFragment"></th:block>
+<div class="container">
+  <div class="p-3 text-center bg-body-tertiary rounded-3">
+    <div class="row">
+      <th:block th:replace="fragment/adminPageSide :: adminPageSideFragment"></th:block>
+      <div class="col-md-7 col-lg-10">
+        <h4 class="mb-3">회원 관리</h4>
+        <hr>
+        <input type="hidden" id="id" th:value="${#authentication.principal.id}"/>
+        <div class="mb-3 row">
+          <label for="email" class="col-sm-2 col-form-label">이메일</label>
+          <div class="col-sm-10">
+            <input type="email" name="username" class="form-control" id="email"
+                   th:value="${#authentication.principal.email}" disabled>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="password" class="col-sm-2 col-form-label">비밀번호</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control" id="password" disabled>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="name" class="col-sm-2 col-form-label">이름</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="name"
+                   th:value="${#authentication.principal.name}" disabled>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="box" class="col-sm-2 col-form-label">박스</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="box"
+                   th:value="${#authentication.principal.box}" disabled>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="password" class="col-sm-2 col-form-label">권한</label>
+          <div class="col-sm-10">
+            <select name="role" class="form-select" aria-label="select"
+                    th:value="${#authentication.principal.role}">
+              <option th:selected="${role} == 'ROLE_ADMIN'" value="ROLE_ADMIN">관리자</option>
+              <option th:selected="${role} == 'ROLE_MEMBER'" value="ROLE_MEMBER">회원</option>
+            </select>
+          </div>
+        </div>
+        <hr class="my-4">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+          <button class="btn btn-primary btn-lg" type="button" id="update-member">회원 수정</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<th:block th:replace="fragment/footer :: footerFragment"></th:block>
+</body>

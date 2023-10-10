@@ -1,11 +1,15 @@
 package wods.crossfit.hashtag.service;
 
 import java.util.List;
-import wods.crossfit.hashtag.domain.dto.HashtagDto;
+import wods.crossfit.hashtag.domain.Hashtag;
+import wods.crossfit.hashtag.domain.dto.HashtagDto.HashtagRequest;
 
 public interface HashtagService {
 
-    void saveHashtag(List<HashtagDto.HashtagRequest> hashtags, long id);
+    List<Hashtag> saveHashtag(List<HashtagRequest> hashtags);
+
+    List<Hashtag> updateHashtag(long workoutId, List<HashtagRequest> hashtags);
 
     List<String> getHashtags();
+
 }

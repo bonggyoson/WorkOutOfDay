@@ -1,18 +1,27 @@
 package wods.crossfit.member.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
+import wods.crossfit.global.config.jwt.TokenProvider;
 import wods.crossfit.member.domain.Member;
+import wods.crossfit.member.domain.dto.MemberDto;
 import wods.crossfit.member.domain.dto.MemberDto.MemberRequest;
 import wods.crossfit.member.domain.dto.MemberDto.MemberResponse;
+import wods.crossfit.member.domain.dto.MemberDto.MemberSearchCondition;
 import wods.crossfit.profile.domain.dto.ProfileDto;
 import wods.crossfit.profile.repository.ProfileRepository;
 import wods.crossfit.member.repository.MemberRepository;
 import wods.crossfit.member.service.MemberService;
+import wods.crossfit.token.repository.RefreshTokenRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +34,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void saveMember(MemberRequest dto) {
         if (memberRepository.existsByEmail(dto.getEmail())) {
-            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+            throw new DuplicateKeyException("이미 존재하는 이메일입니다.");
         } else {
+            // 비밀번호 암호화
             dto.encryptPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
 
             // 회원 가입
@@ -48,12 +58,14 @@ public class MemberServiceImpl implements MemberService {
         member.update(
                 dto.getEmail(),
                 bCryptPasswordEncoder.encode(dto.getPassword()),
-                dto.getName(), dto.getBox());
+                dto.getName(), dto.getBox(), dto.getRole());
     }
 
     @Override
     @Transactional
     public void deleteMember(long id) {
+
+        profileRepository.deleteByMemberId(id);
         memberRepository.deleteById(id);
     }
 
@@ -69,4 +81,25 @@ public class MemberServiceImpl implements MemberService {
 
         return resetPassword;
     }
+
+    @Override
+    public Page<MemberResponse> findMember(Pageable pageable,
+            MemberSearchCondition memberSearchCondition) {
+        return memberRepository.findMember(pageable, memberSearchCondition).map(MemberResponse::new);
+    }
+
+    @Override
+    public MemberResponse findMember(long id) {
+        return memberRepository.findById(id).map(MemberResponse::new)
+                .orElseThrow(
+                        () -> new NotFoundException(String.format("해당 회원은 존재하지 않습니다. ID[%S]", id)));
+    }
+
+    @Override
+    public MemberResponse findByEmail(String email) {
+        return memberRepository.findByEmail(email).map(MemberResponse::new)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("해당 회원은 존재하지 않습니다. EMAIL[%S]", email)));
+    }
+
 }

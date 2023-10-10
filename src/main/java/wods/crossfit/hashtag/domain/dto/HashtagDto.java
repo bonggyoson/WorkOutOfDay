@@ -1,5 +1,7 @@
 package wods.crossfit.hashtag.domain.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,11 @@ public class HashtagDto {
             return Hashtag.builder()
                     .content(content)
                     .build();
+        }
+
+        public List<Hashtag> toEntity(List<HashtagRequest> hashtags) {
+            return hashtags.stream().map(x -> x.toEntity(x.getContent()))
+                    .collect(Collectors.toList());
         }
     }
 

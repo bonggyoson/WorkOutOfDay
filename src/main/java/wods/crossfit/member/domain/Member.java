@@ -1,6 +1,7 @@
 package wods.crossfit.member.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import wods.crossfit.profile.domain.Profile;
 import wods.crossfit.workout.domain.Workout;
 import wods.crossfit.global.common.BaseEntity;
 
@@ -37,32 +39,50 @@ public class Member extends BaseEntity implements UserDetails {
     @Column(name = "member_box")
     private String box;
 
-    @OneToMany(mappedBy = "member")
+    @Column(name = "member_role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Workout> workouts = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
+
     @Builder
-    public Member(String email, String password, String name, String box) {
+    public Member(String email, String password, String name, String box, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.box = box;
+        this.role = role;
     }
 
     public void resetPassword(String password) {
         this.password = password;
     }
 
-    public void update(String email, String password, String name, String box) {
+    public void update(String email, String password, String name, String box, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.box = box;
+        this.role = role;
+    }
+
+    public Member updateName(String name) {
+        this.name = name;
+
+        return this;
     }
 
     // 권한 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(role.getRole()));
+        return authorities;
     }
 
     // 사용자 id 반환 (고유한 값)

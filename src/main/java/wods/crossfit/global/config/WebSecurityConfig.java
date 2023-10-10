@@ -6,23 +6,40 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.web.filter.CorsFilter;
+import wods.crossfit.global.config.jwt.JwtAuthorizationFilter;
+import wods.crossfit.global.config.jwt.JwtProperties;
+import wods.crossfit.global.config.jwt.JwtAuthenticationFilter;
+import wods.crossfit.global.config.jwt.TokenProvider;
+import wods.crossfit.member.repository.MemberRepository;
 import wods.crossfit.member.service.MemberDetailService;
 
 @RequiredArgsConstructor
 @Configuration
+@EnableWebSecurity
 public class WebSecurityConfig {
 
     private final MemberDetailService memberService;
 
     private final LoginFailHandler loginFailHandler;
 
+    private final JwtProperties jwtProperties;
+
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+    private final CorsFilter corsFilter;
+
+    private final TokenProvider tokenProvider;
+
+    private final MemberRepository memberRepository;
 
     // 스프링 시큐리티 기능 비활성화
     @Bean
@@ -35,27 +52,40 @@ public class WebSecurityConfig {
     // 특정 HTTP 요청에 대한 웹 기반 보안 구성
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
-                .antMatchers("/login", "/api/member", "/", "/workout", "/signup", "/qa",
-                        "/resetPassword", "/member/**", "/box").permitAll()
-                .anyRequest().authenticated()
-                .and().exceptionHandling()
+
+        http.csrf().disable();
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .httpBasic().disable()
+                .formLogin().disable()
+                .addFilter(corsFilter)
+
+                .exceptionHandling()
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
-                .accessDeniedHandler(customAccessDeniedHandler)
+//                .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/")
-                .failureHandler(loginFailHandler)
+                .authorizeRequests()
+                .antMatchers("/login", "/signup", "/resetPassword",
+                        "/", "/workout", "/qa", "/box",
+                        "/api/members/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .logout()
-                .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
-                .and()
-                .csrf().disable()
-                .sessionManagement()
-                .maximumSessions(2)
-                .expiredUrl("/login");
+                .addFilter(
+                        new JwtAuthenticationFilter(
+                                authenticationManager(http, bCryptPasswordEncoder(), null),
+                                tokenProvider, jwtProperties))
+                .addFilter(
+                        new JwtAuthorizationFilter(
+                                authenticationManager(http, bCryptPasswordEncoder(), null),
+                                memberRepository, tokenProvider));
+
+        http.logout()
+                .logoutUrl("/logout")
+                .deleteCookies("JSESSIONID", "accessToken")
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    response.sendRedirect("/login");
+                });
 
         return http.build();
     }

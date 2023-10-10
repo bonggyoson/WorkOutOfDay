@@ -3,7 +3,6 @@ package wods.crossfit.comment.domain;
 import static javax.persistence.FetchType.LAZY;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,8 +15,6 @@ import wods.crossfit.workout.domain.Workout;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class Comment extends BaseEntity {
 
     @Id
@@ -37,6 +34,13 @@ public class Comment extends BaseEntity {
     private String content;
 
     public void update(String content) {
+        this.content = content;
+    }
+
+    @Builder
+    public Comment(Member member, Workout workout, String content) {
+        this.member = member;
+        this.workout = workout;
         this.content = content;
     }
 }

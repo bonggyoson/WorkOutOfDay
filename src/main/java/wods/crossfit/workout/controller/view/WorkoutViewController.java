@@ -34,7 +34,7 @@ public class WorkoutViewController {
      * 오늘의 운동 페이지
      */
     @GetMapping("")
-    public String getWorkouts(Model model, Pageable pageable,
+    public String findWorkouts(Model model, Pageable pageable,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String sort,
@@ -53,7 +53,7 @@ public class WorkoutViewController {
      * 오늘의 운동 상세 페이지
      */
     @GetMapping("/{id}")
-    public String getWorkout(@PathVariable long id, Model model, Authentication auth) {
+    public String findWorkout(@PathVariable long id, Model model, Authentication auth) {
 
         WorkoutResponse workout = workoutService.getWorkout(id);
         ProfileResponse profile = profileService.findByMemberId(workout.getMember().getId());

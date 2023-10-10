@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import wods.crossfit.workout.domain.Workout;
+import wods.crossfit.workout.domain.dto.WorkoutDto.WorkoutResponse;
 
-public interface WorkoutRepository extends JpaRepository<Workout, Long> {
+public interface WorkoutRepository extends JpaRepository<Workout, Long>, WorkoutRepositoryCustom {
 
     List<Workout> findAll();
 

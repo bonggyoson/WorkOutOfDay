@@ -20,7 +20,6 @@ import wods.crossfit.profile.domain.Profile;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProfileBenchmark extends BaseEntity {
 
     @Id

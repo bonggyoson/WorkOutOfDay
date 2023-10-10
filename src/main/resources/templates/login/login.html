@@ -1,45 +1,49 @@
 <!-- config -->
 <th:block th:replace="fragment/config :: configFragment"></th:block>
-<body class="gradient-custom">
+<body>
 <div class="container w-25">
-  <section class="d-flex vh-100">
-    <div class="container-fluid row justify-content-center align-content-center">
-      <div class="card bg-dark" style="border-radius: 1rem;">
-        <div class="card-body p-7 text-center">
-          <button type="button" class="btn btn-lg mb-2 fw-bold text-white"
-                  onclick="location.href='/'">WORK OUT
-            OF DAY
-          </button>
-          <p class="text-white-100 fw-bold">로그인</p>
-          <div class="mb-2">
-            <form th:action="@{'/login'}" method="post">
-              <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}"/>
-              <div class="mb-3">
-                <input type="email" class="form-control" name="username" placeholder="이메일">
-              </div>
-              <div class="mb-3">
-                <input type="password" class="form-control" name="password" placeholder="비밀번호"/>
-              </div>
-              <div class="mb-3">
-                <p class="text-danger" th:text="${exception}"></p>
-              </div>
-              <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                <button type="submit" class="btn btn-primary">로그인</button>
-                <button type="button" class="btn btn-secondary" onclick="location.href='/signup'">
-                  회원가입
-                </button>
-              </div>
-              <div class="d-grid gap-2 d-md-flex justify-content-end">
-                <a type="button" class="btn btn-link text-secondary"
-                   onclick="location.href='/resetPassword'">
-                  비밀번호 재발급
-                </a>
-              </div>
-            </form>
+  <div class="card bg-dark bg-gradient d-flex justify-content-center" style="border-radius: 1rem;">
+    <div class="card-body p-7 text-center">
+      <button type="button" class="btn btn-lg mb-2 fw-bold text-white"
+              th:onclick="|location.href='@{/}'|">WORK OUT
+        OF DAY
+      </button>
+      <p class="text-white-100 fw-bold">로그인</p>
+      <div class="mb-2">
+        <form onsubmit="return false">
+          <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}"/>
+          <div class="mb-3">
+            <input type="email" class="form-control" id="username" name="username"
+                   placeholder="이메일">
           </div>
-        </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" id="password" name="password"
+                   placeholder="비밀번호"/>
+          </div>
+          <div class="mb-3">
+            <p class="text-danger" th:text="${exception}"></p>
+          </div>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <button type="submit" class="btn btn-secondary" id="login">로그인</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="location.href='/signup'">
+              회원가입
+            </button>
+          </div>
+          <div class="d-grid gap-2 d-md-flex justify-content-end">
+            <a type="button" class="btn btn-link text-secondary"
+               onclick="location.href='/resetPassword'">
+              비밀번호 재발급
+            </a>
+          </div>
+          <!--              <div class="d-grid gap-2 d-md-flex justify-content-center">-->
+          <!--                <a type="button" class="btn btn-link text-secondary"-->
+          <!--                   onclick="location.href='/oauth2/authorization/google'">-->
+          <!--                  <img src="/static/img/google.png">-->
+          <!--                </a>-->
+          <!--              </div>-->
+        </form>
       </div>
     </div>
-  </section>
+  </div>
 </div>
 </body>
