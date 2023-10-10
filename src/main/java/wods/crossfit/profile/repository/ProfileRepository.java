@@ -7,4 +7,6 @@ import wods.crossfit.profile.domain.Profile;
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
     Optional<Profile> findByMemberId(long id);
+
+    void deleteByMemberId(long id);
 }
