@@ -69,29 +69,6 @@ public class MemberApiController {
                 .body(CommonResponse.res(HttpStatus.CREATED, ResponseMessage.CREATED_MEMBER));
     }
 
-    /**
-     * 회원 조회
-     */
-    @GetMapping("")
-    public ResponseEntity<CommonResponse<List<MemberResponse>>> findMembers() {
-
-        List<MemberResponse> members = memberService.findMembers();
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(CommonResponse.res(HttpStatus.OK, ResponseMessage.FOUND_MEMBER, members));
-    }
-
-    /**
-     * 회원 단건 조회
-     */
-    @GetMapping("/{id}")
-    public ResponseEntity<CommonResponse<MemberResponse>> findMember(@PathVariable long id) {
-
-        MemberResponse member = memberService.findById(id);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(CommonResponse.res(HttpStatus.OK, ResponseMessage.FOUND_MEMBER, member));
-    }
 
     /**
      * 회원 정보 수정
@@ -122,7 +99,7 @@ public class MemberApiController {
     }
 
     /**
-     * 회원 정보 삭제
+     * 회원 삭제
      */
     @Operation(summary = "delete delete member api", responses = {
             @ApiResponse(responseCode = "200", description = "회원 삭제 성공"),

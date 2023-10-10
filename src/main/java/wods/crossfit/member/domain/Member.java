@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import wods.crossfit.profile.domain.Profile;
 import wods.crossfit.workout.domain.Workout;
 import wods.crossfit.global.common.BaseEntity;
 
@@ -38,12 +39,16 @@ public class Member extends BaseEntity implements UserDetails {
     @Column(name = "member_box")
     private String box;
 
-    @Column(name = "member_role")
+    @Column(name = "member_role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Workout> workouts = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 
     @Builder
     public Member(String email, String password, String name, String box, Role role) {

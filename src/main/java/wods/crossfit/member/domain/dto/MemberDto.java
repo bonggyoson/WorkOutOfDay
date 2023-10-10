@@ -7,6 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import wods.crossfit.member.domain.Member;
@@ -55,6 +56,17 @@ public class MemberDto {
 
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MemberSearchCondition {
+
+        private String email;
+        private String name;
+        private String box;
+
+    }
+
+    @Getter
+    @NoArgsConstructor
     public static class MemberResponse {
 
         private Long id;
@@ -66,7 +78,6 @@ public class MemberDto {
         public MemberResponse(Member member) {
             this.id = member.getId();
             this.email = member.getEmail();
-//            this.password = member.getPassword();
             this.name = member.getName();
             this.box = member.getBox();
             this.role = member.getRole();
@@ -76,6 +87,7 @@ public class MemberDto {
         @NoArgsConstructor
         @Getter
         public static class TokenInfo {
+
             private String accessToken;
             private String refreshToken;
         }
