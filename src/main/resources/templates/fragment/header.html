@@ -1,52 +1,67 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.w3.org/1999/xhtml">
-<nav th:fragment="headerFragment">
-  <div class="container">
-    <header>
-      <nav
-          class="navbar bg-body-tertiary d-flex flex-wrap justify-content-md-between py-3 mb-4 border-bottom">
-        <div class="container-fluid">
-          <a class="navbar-brand fw-bold" th:href="@{/}">
-            WORKOUT OF DAY
-          </a>
-          <ul class="nav col mb-2 mb-md-0">
-            <li><a th:href="@{/workout}" class="nav-link px-2" style="color: darkgray">오늘의 운동</a></li>
-            <li><a th:href="@{/box}" class="nav-link px-2" style="color: darkgray">박스</a></li>
-            <li><a th:href="@{/qa}" class="nav-link px-2" style="color: darkgray">QA</a></li>
-          </ul>
-
-          <ul class="nav col-12 col-md-auto justify-content-right mb-md-0"
-              sec:authorize="!isAuthenticated()">
-            <li>
-              <button type="button" class="btn btn-outline-primary me-2"
-                      th:onclick="|location.href='@{/login}'|">
-                로그인
-              </button>
-            </li>
-            <li>
-              <button type="button" class="btn btn-primary"
-                      th:onclick="|location.href='@{/signup}'|">회원가입
-              </button>
-            </li>
-          </ul>
-          <ul class="nav col-12 col-md-auto mb-2 justify-content-right mb-md-0"
-              sec:authorize="isAuthenticated()">
-            <li>
-              <a th:text="|${#authentication.principal.name} 님 |"
-                 class="btn px-2 me-2 fw-bold"
-                 th:href="@{/myPage/myProfile(id=${#authentication.principal.id})}"></a>
-            </li>
-            <li>
-              <button type="button" class="btn btn-primary px-2"
-                      th:onclick="|location.href='@{/logout}'|">
-                로그아웃
-              </button>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </header>
+<nav th:fragment="headerFragment"
+     class="navbar fixed-top flex-wrap justify-content-md-between navbar-dark bg-dark">
+  <div class="container py-2">
+    <a class="navbar-brand fw-bold" th:href="@{/}">
+      WORKOUT OF DAY
+    </a>
+    <ul class="nav col mb-2 mb-md-0">
+      <li><a th:href="@{/workout}" class="nav-link px-2 active" style="color: darkgray">오늘의
+        운동</a>
+      </li>
+      <li><a th:href="@{/box}" class="nav-link px-2" style="color: darkgray">박스</a></li>
+      <li><a th:href="@{/qa}" class="nav-link px-2" style="color: darkgray">QA</a></li>
+    </ul>
+    <ul class="nav col-12 col-md-auto justify-content-right mb-md-0"
+        sec:authorize="isAnonymous()">
+      <li>
+        <button type="button" class="btn btn-outline-secondary me-2"
+                th:onclick="|location.href='@{/login}'|">
+          로그인
+        </button>
+      </li>
+      <li>
+        <button type="button" class="btn btn-secondary"
+                th:onclick="|location.href='@{/signup}'|">회원가입
+        </button>
+      </li>
+    </ul>
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-right mb-md-0"
+        sec:authorize="hasRole('ROLE_MEMBER')">
+      <li>
+        <a th:text="|${#authentication.principal.name} 님 |"
+           class="btn px-2 me-2 fw-bold"
+           th:href="@{/myPage/myProfile(id=${#authentication.principal.id})}"></a>
+      </li>
+      <li>
+        <button type="button" class="btn btn-primary px-2"
+                th:onclick="|location.href='@{/logout}'|">
+          로그아웃
+        </button>
+      </li>
+    </ul>
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-right mb-md-0"
+        sec:authorize="hasRole('ROLE_ADMIN')">
+      <li>
+        <a th:text="|${#authentication.principal.name} 님 |"
+           class="btn px-2 me-2 fw-bold"
+           th:href="@{/myPage/myProfile(id=${#authentication.principal.id})}"></a>
+      </li>
+      <li>
+        <button type="button" class="btn btn-primary me-2"
+                th:onclick="|location.href='@{/logout}'|">
+          로그아웃
+        </button>
+      </li>
+      <li>
+        <button type="button" class="btn btn-primary"
+                th:onclick="|location.href='@{/admin/members}'|">
+          관리자
+        </button>
+      </li>
+    </ul>
   </div>
 </nav>
 </html>

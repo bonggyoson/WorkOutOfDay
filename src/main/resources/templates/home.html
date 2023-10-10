@@ -4,42 +4,34 @@
 <!-- header -->
 <th:block th:replace="fragment/header :: headerFragment"></th:block>
 <div class="container">
-  <div class="p-5 text-center bg-body-tertiary rounded-3">
-    <div class="embed-responsive embed-responsive-4by3 mb-3">
-      <div class="embed-responsive embed-responsive-4by3">
-        <iframe width="560" height="315"
-                src="https://www.youtube.com/embed/BmJv18bISJo?autoplay=1&mute=1"
-                title="YouTube video player" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
+  <div class="p-5 mb-4 bg-body-tertiary rounded-3">
+    <div class="container-fluid py-5">
+      <h1 class="display-5 fw-bold">WELCOME TO CROSSFIT</h1>
+      <p class="col-md-8 fs-4">CrossFit meets you where you are and helps improve your quality of
+        life.</p>
+      <button class="btn btn-outline-light btn-lg" type="button" onclick="location.href='/workout'">
+        WorkOut Of Day
+      </button>
+    </div>
+  </div>
+  <div class="row align-items-md-stretch">
+    <div class="col-md-6">
+      <div class="h-100 p-5 bg-body-tertiary border rounded-3">
+        <h2>Crossfit Games</h2>
+        <div class="embed-responsive embed-responsive-21by9">
+          <iframe class="embed-responsive-item" width="560" height="315"
+                  src="https://www.youtube.com/embed/BmJv18bISJo?autoplay=1&mute=1" frameborder="0"
+                  allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
-    <h1 class="text-body-emphasis">WORK OUT OF DAY</h1>
-    <p class="col-lg-8 mx-auto fs-5 text-muted">
-      CROSSFIT
-    </p>
-    <button class="btn btn-primary" type="button"
-            onclick="location.href='/workout'">
-      오늘의 운동
-    </button>
-    <br/>
-    <button class="btn btn-outline-primary mt-4" type="button" data-bs-toggle="collapse"
-            data-bs-target="#collapseExample" aria-expanded="false"
-            aria-controls="collapseExample">
-      크로스핏?
-    </button>
-    <div class="collapse mt-4" id="collapseExample">
-      <div class="card card-body">
-        <p class="fw-bold text-center fs-4">
-          고기와 야채, 견과류와 씨앗, 약간의 과일, 약간의 전분을 섭취하고 설탕은 섭취하지 마세요. 주요 리프트를 연습하고 훈련하세요: 데드리프트, 클린, 스쿼트,
-          프레스, 클린 앤 저크, 스내치. 마찬가지로, 체조의 기초인 턱걸이, 딥스, 줄넘기, 팔굽혀펴기, 윗몸일으키기, 물구나무서기, 피루엣, 뒤집기, 스플릿, 홀드 등을 마스터하세요.
-          자전거 타기, 달리기, 수영, 줄넘기 등. 단단하고 빠릅니다. 일주일에 5~6일, 창의성이 허용하는 한도 내에서 이러한 요소를 다양한 조합과 패턴으로 혼합하세요.
-          일상은 적입니다. 운동을 짧고 강렬하게 유지하세요. 정기적으로 새로운 스포츠를 배우고 플레이하세요.
-        </p>
-        <p> Greg Glassman, CrossFit Founder</p>
+    <div class="col-md-6">
+      <div class="h-100 p-5 text-bg-dark rounded-3">
+        <h2>WORKOUT OF DAY</h2>
+        <p>FRAN</p>
+        <p>21 - 15 - 9 <br/>Pull-Up<br/> Thruster (95/65)</p>
       </div>
     </div>
-
   </div>
 </div>
 <th:block th:replace="fragment/footer :: footerFragment"></th:block>
