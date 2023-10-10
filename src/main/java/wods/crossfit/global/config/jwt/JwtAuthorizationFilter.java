@@ -2,9 +2,7 @@ package wods.crossfit.global.config.jwt;
 
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -43,7 +41,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             FilterChain chain) throws IOException, ServletException {
         System.out.println("인증이나 권한이 필요한 주소 요청");
 
-//        String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
         if (request.getCookies() != null) {
             Cookie[] cookies = request.getCookies();
             Cookie cookie = cookies[0];
@@ -58,28 +55,31 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             String jwtToken = token
                     .replace(JwtProperties.TOKEN_PREFIX, "");
 
-            Long memberId = tokenProvider.getMemberId(jwtToken);
+            if (tokenProvider.validToken(jwtToken)) {
+                Long memberId = tokenProvider.getMemberId(jwtToken);
 
-//        String username = JWT.require(Algorithm.HMAC512(JwtInterface.SECRET)).build()
-//                .verify(jwtToken)
-//                .getClaim("username").asString();
+                // 서명이 정상적으로 됨
+                if (memberId != null) {
+                    Member memberEntity = memberRepository.findById(memberId).orElseThrow(
+                            () -> new NotFoundException(
+                                    String.format("해당 회원은 존재하지 않습니다. [%S]", memberId)));
 
-            // 서명이 정상적으로 됨
-            if (memberId != null) {
-                Member memberEntity = memberRepository.findById(memberId).orElseThrow(
-                        () -> new NotFoundException(
-                                String.format("해당 회원은 존재하지 않습니다. [%S]", memberId)));
+                    // Jwt 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어 준다.
+                    Authentication authentication =
+                            new UsernamePasswordAuthenticationToken(memberEntity, null,
+                                    memberEntity.getAuthorities());
 
-                // Jwt 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어 준다.
-                Authentication authentication =
-                        new UsernamePasswordAuthenticationToken(memberEntity, null,
-                                memberEntity.getAuthorities());
-
-                // 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장.
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    // 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장.
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+                System.out.println("인증 성공");
+                chain.doFilter(request, response);
+            } else {
+                System.out.println("인증 실패");
+                chain.doFilter(request, response);
             }
-            chain.doFilter(request, response);
         } else {
+            System.out.println("쿠키 없음");
             chain.doFilter(request, response);
         }
 

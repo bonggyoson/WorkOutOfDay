@@ -61,14 +61,14 @@ public class WebSecurityConfig {
                 .addFilter(corsFilter)
 
                 .exceptionHandling()
-//                .authenticationEntryPoint(customAuthenticationEntryPoint)
-//                .accessDeniedHandler(customAccessDeniedHandler)a
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+//                .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
                 .authorizeRequests()
                 .antMatchers("/login", "/signup", "/resetPassword",
                         "/", "/workout", "/qa", "/box",
                         "/api/members/**").permitAll()
-                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(
@@ -79,6 +79,13 @@ public class WebSecurityConfig {
                         new JwtAuthorizationFilter(
                                 authenticationManager(http, bCryptPasswordEncoder(), null),
                                 memberRepository, tokenProvider));
+
+        http.logout()
+                .logoutUrl("/logout")
+                .deleteCookies("JSESSIONID", "accessToken")
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    response.sendRedirect("/login");
+                });
 
         return http.build();
     }
