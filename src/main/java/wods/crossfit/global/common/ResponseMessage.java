@@ -21,6 +21,12 @@ public class ResponseMessage {
     public static final String DELETE_WORKOUT_FAIL = "오늘의 운동 삭제 실패";
     public static final String PROFILE_UPDATE = "프로필 수정 성공";
     public static final String PROFILE_UPDATE_FAIL = "프로필 수정 실패";
+    public static final String CREATED_PROFILE_BENCHMARK = "프로필 벤치마크 생성 성공";
+    public static final String CREATED_PROFILE_BENCHMARK_FAIL = "프로필 벤치마크 생성 실패";
+    public static final String CREATED_PROFILE_BENCHMARK_RECORD = "프로필 벤치마크 기록 등록 성공";
+    public static final String CREATED_PROFILE_BENCHMARK_RECORD_FAIL = "프로필 벤치마크 기록 등록 실패";
+    public static final String CREATED_BENCHMARK = "벤치마크 생성 성공";
+    public static final String CREATED_BENCHMARK_FAIL = "벤치마크 생성 실패";
     public static final String CREATED_COMMENT = "댓글 등록 성공";
     public static final String CREATED_COMMENT_FAIL = "댓글 등록 실패";
     public static final String UPDATE_COMMENT = "댓글 수정 성공";

@@ -1,26 +1,25 @@
-// 벤치마크 등록
-const createBenchmark = document.getElementById('create-benchmark');
+// 프로필 벤치마크 등록
+const createProfileBenchmark = document.getElementById(
+    'create-profile-benchmark');
 
-if (createBenchmark) {
-  createBenchmark.addEventListener("click", () => {
+if (createProfileBenchmark) {
+  createProfileBenchmark.addEventListener("click", () => {
+    createProfileBenchmark.setAttribute("disabled", "disabled");
     let memberId = document.getElementById('memberId').value;
     let profileId = document.getElementById('profileId').value;
-    let benchmark_arr = [];
+    let data = [];
 
     $("input[name='benchmark']:checked").each(function () {
       let chked = $(this).val();
-      benchmark_arr.push(chked);
+      data.push({"profileId": profileId, "benchmarkId": chked});
     });
 
-    fetch("/api/benchmark", {
+    fetch("/api/profileBenchmark/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        id: benchmark_arr,
-        profileId: profileId,
-      }),
+      body: JSON.stringify(data),
     }).then((response) => {
       if (response.ok) {
         swal({
@@ -48,7 +47,7 @@ function deleteBenchmark(id) {
   })
   .then((result) => {
     if (result) {
-      fetch(`/api/benchmark/${id}`, {
+      fetch(`/api/profileBenchmark/${id}`, {
         method: 'DELETE'
       })
       .then(() => {
@@ -63,7 +62,7 @@ function deleteBenchmark(id) {
   });
 }
 
-// 벤치마크 기록 등록 및 수정
+// 프로필 벤치마크 기록 등록 및 수정
 function updateBenchmark(id) {
   let memberId = document.getElementById('memberId').value;
   let record = document.getElementById('benchmarkRecord-' + id).value;
@@ -71,7 +70,7 @@ function updateBenchmark(id) {
   let regExp = /^[0-9]*$/;
 
   if (regExp.test(record) && record !== '') {
-    fetch(`/api/benchmark/${id}`, {
+    fetch(`/api/profileBenchmark/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"

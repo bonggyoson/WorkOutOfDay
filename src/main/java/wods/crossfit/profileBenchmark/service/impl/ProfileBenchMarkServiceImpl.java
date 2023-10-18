@@ -1,15 +1,19 @@
 package wods.crossfit.profileBenchmark.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.webjars.NotFoundException;
 import wods.crossfit.benchmark.domain.Benchmark;
 import wods.crossfit.profile.domain.Profile;
 import wods.crossfit.profileBenchmark.domain.ProfileBenchmark;
-import wods.crossfit.profileBenchmark.domain.dto.ProfileBenchMarkDto.saveProfileBenchmarkRecordRequest;
+import wods.crossfit.profileBenchmark.domain.dto.ProfileBenchMarkDto.ProfileBenchmarkRequest;
+import wods.crossfit.profileBenchmark.domain.dto.ProfileBenchMarkDto.ProfileBenchmarkRequestEntity;
+import wods.crossfit.profileBenchmark.domain.dto.ProfileBenchMarkDto.ProfileBenchmarkRequestRecord;
+import wods.crossfit.profileBenchmark.domain.dto.ProfileBenchMarkDto.ProfileBenchmarkResponse;
 import wods.crossfit.benchmark.repository.BenchmarkRepository;
-import wods.crossfit.profileBenchmark.domain.dto.ProfileBenchMarkDto.saveProfileBenchmarkRequest;
 import wods.crossfit.profileBenchmark.repository.ProfileBenchmarkRepository;
 import wods.crossfit.profile.repository.ProfileRepository;
 import wods.crossfit.profileBenchmark.service.ProfileBenchmarkService;
@@ -26,30 +30,52 @@ public class ProfileBenchMarkServiceImpl implements ProfileBenchmarkService {
 
     @Override
     @Transactional
-    public void save(saveProfileBenchmarkRequest dto) {
-        Profile profile = profileRepository.findById(dto.getProfileId())
-                .orElseThrow(() -> new NotFoundException("해당 프로필이 존재하지 않습니다."));
+    public void saveProfileBenchmark(List<ProfileBenchmarkRequest> profileBenchmarks) {
 
-        for (long id : dto.getId()) {
-            Benchmark benchmark = benchmarkRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("해당 벤치마크가 존재하지 않습니다."));
+        List<ProfileBenchmarkRequestEntity> profileBenchmarkRequestEntities = new ArrayList<>();
 
-            profileBenchMarkRepository.save(dto.toEntity(profile, benchmark));
+        for (ProfileBenchmarkRequest profileBenchmarkRequest : profileBenchmarks) {
+            Profile profile = profileRepository.findById(
+                            profileBenchmarkRequest.getProfileId())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            String.format("Not Found Profile Id : [%S]",
+                                    profileBenchmarkRequest.getProfileId())
+                    ));
+
+            Benchmark benchmark = benchmarkRepository.findById(
+                            profileBenchmarkRequest.getBenchmarkId())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            String.format("Not Found Benchmark Id : [%S]",
+                                    profileBenchmarkRequest.getBenchmarkId())));
+
+            profileBenchmarkRequestEntities.add(
+                    new ProfileBenchmarkRequestEntity(profile, benchmark));
         }
+
+        profileBenchMarkRepository.saveAll(
+                new ProfileBenchmarkRequestEntity().toEntity(profileBenchmarkRequestEntities));
     }
 
     @Override
     @Transactional
-    public void update(long id, saveProfileBenchmarkRecordRequest dto) {
+    public void saveProfileBenchmarkRecordRequest(long id, ProfileBenchmarkRequestRecord dto) {
         ProfileBenchmark profileBenchmark = profileBenchMarkRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 벤치마크가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format("Not Found Id : [%S]", id)));
 
         profileBenchmark.updateRecord(dto.getRecord());
     }
 
     @Override
     @Transactional
-    public void delete(long id) {
+    public void deleteProfileBenchmark(long id) {
         profileBenchMarkRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ProfileBenchmarkResponse> findProfileBenchmark(long id) {
+        return profileBenchMarkRepository.findByProfileId(id).stream()
+                .map(ProfileBenchmarkResponse::new).
+                collect(Collectors.toList());
     }
 }

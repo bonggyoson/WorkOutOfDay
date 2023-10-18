@@ -1,6 +1,8 @@
 package wods.crossfit.profileBenchmark.domain.dto;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,23 +16,39 @@ public class ProfileBenchMarkDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class saveProfileBenchmarkRequest {
+    public static class ProfileBenchmarkRequest {
 
-        private List<Long> id;
+        private long benchmarkId;
         private long profileId;
+    }
 
-        public ProfileBenchmark toEntity(Profile profile, Benchmark benchmark) {
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ProfileBenchmarkRequestEntity {
+
+        private Profile profile;
+        private Benchmark benchmark;
+
+        public ProfileBenchmark toEntity(Benchmark benchmark, Profile profile) {
             return ProfileBenchmark.builder()
-                    .profile(profile)
                     .benchmark(benchmark)
+                    .profile(profile)
                     .build();
+        }
+
+        public List<ProfileBenchmark> toEntity(
+                List<ProfileBenchmarkRequestEntity> profileBenchmarkRequestEntities) {
+            return profileBenchmarkRequestEntities.stream()
+                    .map(x -> x.toEntity(x.getBenchmark(), x.getProfile()))
+                    .collect(Collectors.toList());
         }
     }
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class saveProfileBenchmarkRecordRequest {
+    public static class ProfileBenchmarkRequestRecord {
 
         private String record;
 

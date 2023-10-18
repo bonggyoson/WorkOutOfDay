@@ -113,7 +113,7 @@
                               </div>
                             </th:block>
                             <div class="modal-footer">
-                              <button type="button" class="btn btn-primary" id="create-benchmark">
+                              <button type="button" class="btn btn-primary" id="create-profile-benchmark">
                                 추가
                               </button>
                             </div>
@@ -170,7 +170,7 @@
                                       </div>
                                       <div class="col-auto">
                                         <input type="text"
-                                               th:id="|benchmarkRecord-${profileBenchmark.benchmark.id}|"
+                                               th:id="|benchmarkRecord-${profileBenchmark.id}|"
                                                class="form-control"
                                                th:value="${profileBenchmark.record}">
                                       </div>
@@ -185,13 +185,13 @@
                                     <div class="row">
                                       <div class="col">
                                         <button type="button" class="btn btn-danger"
-                                                th:onclick="|deleteBenchmark(${profileBenchmark.benchmark.id})|">
+                                                th:onclick="|deleteBenchmark(${profileBenchmark.id})|">
                                           삭제
                                         </button>
                                       </div>
                                       <div class="col">
                                         <button type="button" class="btn btn-primary"
-                                                th:onclick="|updateBenchmark(${profileBenchmark.benchmark.id})|">
+                                                th:onclick="|updateBenchmark(${profileBenchmark.id})|">
                                           저장
                                         </button>
                                       </div>
